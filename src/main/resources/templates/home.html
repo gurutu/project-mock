@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      >
+<head>
+    <meta charset="utf-8"/>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <!-- include css in the header -->
+    <!--    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/angular-material.min.css}"/>
+    <title>Adding Static Resources (css, JavaScript, Images) to Thymeleaf</title>
+
+</head>
+<body ng-app="projectmock"   ng-cloak>
+<div class="container">
+    <a ui-sref="hello">Hello</a> ||||
+    <a ui-sref="api-detail">api-detail</a>||||
+    <a ui-sref="change-api-detail">api-detail</a><br>
+    <!-- include image from static resources -->
+    <ui-view></ui-view>
+
+</div>
+
+
+<script type="text/javascript" th:src="@{/js/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/angular-animate.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/angular-route.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/angular-aria.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/angular-messages.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/angular.ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/angular-material.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/project-mock.js}"></script>
+<script type="text/javascript" th:src="@{/js/CommonController.js}"></script>
+</body>
+</html>
+
+

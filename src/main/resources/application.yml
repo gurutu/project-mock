@@ -1,0 +1,21 @@
+spring:
+  thymeleaf:
+    cache: false
+    check-template: true
+    check-template-location: true
+    enabled: true
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+    servlet:
+      content-type: text/html
+    mode: HTML
+
+
+logging:
+  level:
+    root: WARN
+    com.project: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+

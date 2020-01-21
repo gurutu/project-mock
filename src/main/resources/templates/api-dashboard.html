@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body >
+
+<md-autocomplete
+
+
+                 md-no-cache="noCache"
+                 md-selected-item="selectedItem"
+                 md-search-text="searchText"
+                 md-items="item in querySearch(searchText)"
+                 md-item-text="item.display"
+                 md-escape-options="clear"
+                 md-require-match=""
+
+                 placeholder="Search Api EndPoint"
+                 input-aria-describedby="favoriteStateLabel"
+
+>
+    <md-item-template>
+        <span class="item-metadata">
+            <span>
+              <strong>{{item.value}} :> </strong>
+            </span>
+            <span>
+              <strong>{{item.display}}</strong>
+            </span>
+          </span>
+        <span md-highlight-text="searchText">{{item.display}}</span>
+    </md-item-template>
+    <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
+        <div ng-message="required">You <b>must</b> have a favorite state.</div>
+        <div ng-message="md-require-match">Please select an existing state.</div>
+        <div ng-message="minlength">Your entry is not long enough.</div>
+        <div ng-message="maxlength">Your entry is too long.</div>
+    </div>
+
+</md-autocomplete>
+
+
+<h4>Seleted Value {{selectedItem}}</h4>
+
+<h3>Related Searched Api </h3>
+<div >
+    <md-card ng-click="goToApiDetails()" style="cursor: pointer" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">PUT :> /v1/mediy/type/slot/man</span>
+            </md-card-title-text>
+        </md-card-title>
+    </md-card>
+</div>
+
+
+
+
+<request-response-template></request-response-template>
+</body>
+</html>
