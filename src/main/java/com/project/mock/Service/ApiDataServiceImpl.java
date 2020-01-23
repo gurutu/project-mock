@@ -36,8 +36,8 @@ public class ApiDataServiceImpl implements ApiDataService {
     }
 
     @Override
-    public Page<ApiData> findByUri(String name, Pageable pageable) {
-        return ApiDataRepository.findByUri(name, pageable);
+    public Page<ApiData> findByUrlPath(String name, Pageable pageable) {
+        return ApiDataRepository.findByUrlPath(name, pageable);
     }
 
 //    @Override

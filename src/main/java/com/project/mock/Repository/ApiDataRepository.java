@@ -13,8 +13,11 @@ public interface ApiDataRepository extends ElasticsearchRepository<ApiData,Strin
 //    Page<ApiData> findByAuthorsNameUsingCustomQuery(String name, Pageable pageable);
 
 
-    Page<ApiData> findByUri(String name, Pageable pageable);
+    Page<ApiData> findByUrlPath(String name, Pageable pageable);
 
+    Page<ApiData> findByUrlPathAAndMethodAndRequest(String name, Pageable pageable);
+
+    Page<ApiData> findByUrlPathAndMethod(String name, Pageable pageable);
 //    @Query("{\"bool\": {\"must\": [{\"match\": {\"authors.name\": \"?0\"}}]}}")
 //    Page<ApiData> findByAuthorsNameUsingCustomQuery(String name, Pageable pageable);
 //

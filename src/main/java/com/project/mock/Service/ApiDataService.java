@@ -15,7 +15,9 @@ public interface ApiDataService {
 
     Iterable<ApiData> findAll();
 
-    Page<ApiData> findByUri(String name, Pageable pageable);
+    Page<ApiData> findByUrlPath(String name, Pageable pageable);
+
+
 
 //    Page<ApiData> findByAuthorNameUsingCustomQuery(String name, Pageable pageable);
 //
