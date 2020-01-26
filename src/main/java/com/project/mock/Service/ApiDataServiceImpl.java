@@ -1,5 +1,6 @@
 package com.project.mock.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.project.mock.DataModal.ApiData;
@@ -13,31 +14,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApiDataServiceImpl implements ApiDataService {
 
-    private final ApiDataRepository ApiDataRepository;
+
+    private final ApiDataRepository apiDataRepository;
     
     @Autowired
     public ApiDataServiceImpl(ApiDataRepository ApiDataRepository) {
-        this.ApiDataRepository = ApiDataRepository;
+        this.apiDataRepository = ApiDataRepository;
     }
 
     @Override
     public ApiData save(ApiData ApiData) {
-        return ApiDataRepository.save(ApiData);
+        return apiDataRepository.save(ApiData);
     }
 
     @Override
     public Optional<ApiData> findOne(String id) {
-        return ApiDataRepository.findById(id);
+        return apiDataRepository.findById(id);
     }
 
     @Override
     public Iterable<ApiData> findAll() {
-        return ApiDataRepository.findAll();
+        return apiDataRepository.findAll();
     }
 
     @Override
-    public Page<ApiData> findByUrlPath(String name, Pageable pageable) {
-        return ApiDataRepository.findByUrlPath(name, pageable);
+    public List<ApiData> findByUrlPath(String name) {
+        return apiDataRepository.findByUrlPath(name);
+    }
+
+    @Override
+    public List<ApiData> findByUrlPathAAndMethodAndRequest(String uri, String method, String request) {
+        return apiDataRepository.findByUrlPathAndMethodAndRequest(uri, method, request);
     }
 
 //    @Override
@@ -45,10 +52,10 @@ public class ApiDataServiceImpl implements ApiDataService {
 //        return ApiDataRepository.findByAuthorsNameUsingCustomQuery(name, pageable);
 //    }
 //
-//    @Override
-//    public Page<ApiData> findByFilteredTagQuery(String tag, Pageable pageable) {
-//        return ApiDataRepository.findByFilteredTagQuery(tag, pageable);
-//    }
+    @Override
+    public List<ApiData> findByFilteredTagQuery(String tag, String pageable) {
+        return apiDataRepository.findByFilteredTagQuery(tag, pageable);
+    }
 //
 //    @Override
 //    public Page<ApiData> findByAuthorsNameAndFilteredTagQuery(String name, String tag, Pageable pageable) {
@@ -57,11 +64,11 @@ public class ApiDataServiceImpl implements ApiDataService {
 
     @Override
     public long count() {
-        return ApiDataRepository.count();
+        return apiDataRepository.count();
     }
 
     @Override
     public void delete(ApiData ApiData) {
-        ApiDataRepository.delete(ApiData);
+        apiDataRepository.delete(ApiData);
     }
 }

@@ -1,22 +1,35 @@
 package com.project.mock.DataModal;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Document(indexName = "mock-data", type = "ApiData")
 public class ApiData {
 
     @Id
-    @JsonIgnore
     private String id;
     private String urlPath;
+    
     private String method;
     private String request;
     private String response;
 
-    public String getId() {
+    public ApiData() {
+		super();
+	}
+
+	public ApiData(String urlPath, String method, String request, String response) {
+		super();
+		this.urlPath = urlPath;
+		this.method = method;
+		this.request = request;
+		this.response = response;
+	}
+
+	public String getId() {
         return id;
     }
 
@@ -31,7 +44,6 @@ public class ApiData {
     public void setUrlPath(String urlPath) {
         this.urlPath = urlPath;
     }
-
     public String getMethod() {
         return method;
     }

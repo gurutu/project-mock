@@ -1,5 +1,6 @@
 package com.project.mock.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.project.mock.DataModal.ApiData;
@@ -15,13 +16,14 @@ public interface ApiDataService {
 
     Iterable<ApiData> findAll();
 
-    Page<ApiData> findByUrlPath(String name, Pageable pageable);
+   List<ApiData> findByUrlPath(String name);
+    List<ApiData> findByUrlPathAAndMethodAndRequest(String uri,String method,String request);
 
-
-
+    
+    
 //    Page<ApiData> findByAuthorNameUsingCustomQuery(String name, Pageable pageable);
 //
-//    Page<ApiData> findByFilteredTagQuery(String tag, Pageable pageable);
+    List<ApiData> findByFilteredTagQuery(String tag, String responce);
 //
 //    Page<ApiData> findByAuthorsNameAndFilteredTagQuery(String name, String tag, Pageable pageable);
 
