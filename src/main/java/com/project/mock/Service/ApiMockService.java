@@ -1,18 +1,18 @@
-package com.project.mock.Repository;
+package com.project.mock.Service;
 
 import java.util.List;
-
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import java.util.Optional;
 
 import com.project.mock.DataModal.ApiData;
 import com.project.mock.DataModal.ApiMongoTemplate;
 
-public interface ApiDataMongoRepository extends MongoRepository<ApiMongoTemplate, String> {
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-	List<ApiMongoTemplate> findByUrlPath(String replace);
 
-	@Query("{'urlPath': {$regex: '.*?0.*'} }")
+
+public interface ApiMockService {
+    
 	List<ApiMongoTemplate> findEmployeeByName(String url);
 
 	List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request);

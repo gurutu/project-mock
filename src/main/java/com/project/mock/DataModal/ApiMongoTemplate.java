@@ -11,8 +11,7 @@ public class ApiMongoTemplate {
 	    @Id
 	    private String id;
 	    
-	    @Indexed
-	    @TextIndexed(weight=2)
+	   
 	    private String urlPath; 
 	    
 	    private String method;

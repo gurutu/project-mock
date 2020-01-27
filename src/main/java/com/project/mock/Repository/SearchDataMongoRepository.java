@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import com.project.mock.DataModal.ApiData;
 import com.project.mock.DataModal.ApiMongoTemplate;
 
-public interface ApiDataMongoRepository extends MongoRepository<ApiMongoTemplate, String> {
+public interface SearchDataMongoRepository extends MongoRepository<ApiMongoTemplate, String> {
 
 	List<ApiMongoTemplate> findByUrlPath(String replace);
 

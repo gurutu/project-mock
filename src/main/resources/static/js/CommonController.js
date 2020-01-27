@@ -4,7 +4,11 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
      $scope.selectedItem="";
 
      $scope.goToApiDetails=function(param){
-         $state.go('api-detail');
+    	var object={"object":$scope.selectedItem}
+         $state.go('api-detail',{data:object});
+     }
+     $scope.selectedAutoSearch=function(method,uriPath){
+    	 CommonService.searchbyUriandmethod
      }
 
 
@@ -24,7 +28,7 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
          CommonService.getData(data,config).then(function (response) {
          	response.data.forEach(function(item, index, array) {
          		  console.log(item, index)
-         		  searData.push({value: item.method,display: item.urlPath
+         		  searData.push({value: item.method,display: item.urlPath,id: item.id
                 })
          	})
            return searData;

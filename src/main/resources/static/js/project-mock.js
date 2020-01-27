@@ -17,7 +17,10 @@ app.config(function($stateProvider,$locationProvider,$urlRouterProvider) {
         name: 'api-detail',
         url: '/api-detail',
         templateUrl: 'api-details.html',
-        controller:'apiDetailsController'
+        controller:'apiDetailsController',
+        params: {
+        	data: null
+        }
     }
 
     var changeApiState = {
