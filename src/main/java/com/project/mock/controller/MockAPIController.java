@@ -27,6 +27,7 @@ import com.project.mock.DataModal.ApiMongoTemplate;
 import com.project.mock.Repository.ApiDataMongoRepository;
 import com.project.mock.Service.ApiMockServiceImpl;
 
+
 /**
  * 
  * @author Pranav
@@ -178,11 +179,11 @@ public class MockAPIController {
 	 */
 	@RequestMapping(value = "/project-mock/save-data", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public Map<String, String> sendDataToDatabase(@RequestBody List<ApiDataPojo> map, HttpServletRequest request) {
-		map.forEach(e -> {
+	public Map<String, String> sendDataToDatabase(@RequestBody ApiDataPojo map, HttpServletRequest request) {
+		//map.forEach(e -> {
 			apiDataMongoRepository
-					.save(new ApiMongoTemplate(e.getUrlPath(), e.getMethod(), e.getRequest(), e.getResponse()));
-		});
+					.save(new ApiMongoTemplate(map.getUrlPath(), map.getMethod(), map.getRequest(), map.getResponse()));
+		//});
 		return new HashMap<>();
 	}
 
@@ -195,8 +196,14 @@ public class MockAPIController {
 	@RequestMapping(value = "/project-mock/searchbyUriandmethod", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
 		"application/json" })
 	public List<ApiMongoTemplate> searchByUriAndMethod(@RequestBody Map<String, Object> payload, HttpServletRequest request) {
-	return apiDataMongoRepository.findByUrlPathAndMethod( payload.get("urlPath").toString(), payload.get("method").toString());
+	return apiDataMongoRepository.findByUrlPathAndMethod( payload.get("display").toString(), payload.get("value").toString());
 	}
+	
+	@RequestMapping(value = "/project-mock/searchbyid", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
+	"application/json" })
+public ApiMongoTemplate searchById(@RequestBody Map<String, String> payload, HttpServletRequest request) {
+return apiDataMongoRepository.findById(payload.get("Id")).get();
+}
 	
 
 	@RequestMapping(value = "/js/**", method = RequestMethod.GET)

@@ -26,9 +26,9 @@ public class MockUIController {
 		return "change-api-details";
 	}
 
-	@RequestMapping("/login")
+	@RequestMapping("/request-response-template")
 	public String loginPage() {
-		return "login";
+		return "request-response-template";
 	}
 
 }

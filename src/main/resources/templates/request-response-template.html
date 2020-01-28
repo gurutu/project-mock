@@ -1,0 +1,30 @@
+<div>
+
+    <div layout-gt-sm="row" >
+        <md-input-container class="md-block" flex-gt-sm  >
+            <label>Request</label>
+            <textarea  class="md-whiteframe-3dp" ng-change="formatJson(requestModal)" style="    background-color: white;" ng-model="requestModal" rows="10" cols="150" md-no-autogrow md-select-on-focus>
+           {{requestModal}}
+            </textarea>
+        </md-input-container>
+
+        <div flex="3" hide-xs hide-sm>
+            <!-- Spacer //-->
+        </div>
+
+        <md-input-container class="md-block" flex-gt-sm >
+            <label>Response</label>
+            <textarea  class="md-whiteframe-3dp" ng-change="formatJsonResponse(responseModal)" style="    background-color: white;" ng-model="responseModal" rows="10" cols="150" md-no-autogrow md-select-on-focus>
+           {{responseModal}}
+            </textarea>
+        </md-input-container>
+
+
+    </div>
+    <div flex="7"  layout-align="end end">
+        <div layout="row" layout-align="end end" >
+            <md-button ng-click="showListBottomSheet(false);publishData(method,urlPath,requestModal,responseModal);" class="md-raised md-primary">Publish</md-button>
+        </div>
+
+    </div>
+</div>

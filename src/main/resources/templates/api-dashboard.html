@@ -5,7 +5,9 @@
     <title>Title</title>
 </head>
 <body >
-
+<div layout="row" layout-xs="column">
+  <div flex="90">
+  
 <md-autocomplete
                  md-no-cache="noCache"
                  md-selected-item="selectedItem"
@@ -20,7 +22,7 @@
 
 >
     <md-item-template>
-        <span class="item-metadata" ng-click="selectedAutoSearch(item.value,item.display)">
+        <span class="item-metadata" ng-click="goToApiDetails()">
             <span>
               <strong>{{item.value}} :> </strong>
             </span>
@@ -38,24 +40,27 @@
     </div>
 
 </md-autocomplete>
+  </div>
+   <div flex="3">
+   </div>
+  <div flex="" style="margin-top: -4px;">
+ <md-button class="md-raised md-primary">Create New API</md-button>
+  </div>
+</div>
 
 
-<h4>Seleted Value {{selectedItem}}</h4>
 
-<h3>Related Searched Api </h3>
-<div >
-    <md-card ng-click="goToApiDetails()" style="cursor: pointer" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+<h3 ng-if="searchRelativeData.length>0">Related Searched Api </h3>
+<div ng-repeat="data in searchRelativeData track by $index ">
+    <md-card ng-click="clickedRelative(data.value,data.display)" style="cursor: pointer" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline">PUT :> /v1/mediy/type/slot/man</span>
+                <span class="md-headline">{{data.value}} :> {{data.display}}</span>
             </md-card-title-text>
         </md-card-title>
     </md-card>
 </div>
 
 
-
-
-<request-response-template></request-response-template>
 </body>
 </html>

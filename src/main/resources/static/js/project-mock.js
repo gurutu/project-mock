@@ -22,6 +22,13 @@ app.config(function($stateProvider,$locationProvider,$urlRouterProvider) {
         	data: null
         }
     }
+    
+    var requestResponseState= {
+            name: 'requestResponseState',
+            url: '/requestResponseState',
+            templateUrl: 'request-response-template.html',
+           
+        }
 
     var changeApiState = {
         name: 'change-api-detail',
@@ -34,6 +41,7 @@ app.config(function($stateProvider,$locationProvider,$urlRouterProvider) {
     $stateProvider.state(helloState);
     $stateProvider.state(apiDetailState);
     $stateProvider.state(changeApiState);
+    $stateProvider.state(requestResponseState);
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false
@@ -48,19 +56,24 @@ app.controller('apidashboardCtrl', function($scope) {
 
 app.directive("requestResponseTemplate", function() {
     return {
-        templateUrl: 'login.html'
+    	templateUrl: 'request-response-template.html'//'request-response-template.html'
     };
 });
 
-// app.directive("apiDashboardTemplate", function() {
-//     return {
-//         //controller: 'apidashboardCtrl',
-//         controller: function () {},
-//         controllerAs: '$ctrl',
-//         bindToController: false,
-//         templateUrl: 'api-dashboard.html'
-//     };
-// });
+ app.directive("testareaTemplate", function() {
+     return {
+         //controller: 'apidashboardCtrl',
+    	 scope: {
+    	      customerInfo: '=data'
+    	    },
+         bindToController: false,
+         template: '<md-input-container class="md-block" flex-gt-sm>'+
+             '<label>Request</label>'+
+             '<textarea  class="md-whiteframe-3dp" style="background-color: white;" value={{JSON.stringify(JSON.parse(customerInfo), null, 2)}} rows="10" cols="150" md-no-autogrow md-select-on-focus'+ 
+             '></textarea>'+
+         '</md-input-container>'
+     };
+ });
 //
 // app.directive("apiDetailsTemplate", function() {
 //     return {
