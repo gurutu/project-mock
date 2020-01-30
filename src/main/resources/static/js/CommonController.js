@@ -93,6 +93,9 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
 
 app.controller('apiDetailsController',function($scope,$state,CommonService,$rootScope) {
     $scope.message = 'Hello Welcome To Home Page';
+    if($state.params.data==null){
+    	$state.go('hello');
+    }
     $scope.publishbutton=false;
     $scope.method="";
     $scope.urlPath="";
@@ -129,8 +132,10 @@ app.controller('apiDetailsController',function($scope,$state,CommonService,$root
     	  $scope.publishbutton=param;
     }
     
-    $scope.goToChangeApiDetails=function () {
-        $state.go('change-api-detail');
+    $scope.goToChangeApiDetails=function (request,response) {
+    	
+        $state.go('change-api-detail',{data:{"urlPath":$scope.urlPath,"method":$scope.method,
+        	"request":request,"response":response}});
     }
 
     $scope.init=function(){
@@ -146,9 +151,47 @@ app.controller('apiDetailsController',function($scope,$state,CommonService,$root
     $scope.init();
 });
 
-app.controller('changeApiDetailsController',function($scope) {
+app.controller('changeApiDetailsController',function($scope,$state,CommonService) {
     $scope.message = 'Hello Welcome To Home Page';
+    if($state.params.data==null){
+    	$state.go('hello');
+    }
+    $scope.convertInJson=function(data){
+    	return JSON.stringify(JSON.parse(data), null, 2);
+    }
+    $scope.method=$state.params.data.method;
+    $scope.urlPath=$state.params.data.urlPath;
+    $scope.request=$scope.convertInJson($state.params.data.request);
+    $scope.response=$scope.convertInJson($state.params.data.response);
+    $scope.publishData=function(method,urlPath,request,response){
+    	var data={
+    			  "urlPath":urlPath,
+    			  "method":method,
+    			  "request":request,
+    			  "response":response
+    	}
+    	var config={"Content-Type":"application/json"};
+    	CommonService.saveDate(data,config).then(function(response){
+    		console.log(response.data);
+    	});
+    }
+    $scope.formatJsonResponse=function(res){
+    	try{
+    		$scope.response=JSON.stringify(JSON.parse(res), null, 2);
+    	}catch(err){console.log(err);}	
+    }
+   
+   
+    $scope.formatJsonRequest=function(request){
+    	try{
+    		$scope.request=JSON.stringify(JSON.parse(request), null, 2);
+    	}catch(err){console.log(err);}
+    	
+    }
 
-
+    $scope.init=function(){
+    	
+    }
+    $scope.init();
 
 });

@@ -34,7 +34,10 @@ app.config(function($stateProvider,$locationProvider,$urlRouterProvider) {
         name: 'change-api-detail',
         url: '/change-api-detail',
         templateUrl: 'change-api-details.html',
-        controller:'changeApiDetailsController'
+        controller:'changeApiDetailsController',
+        	params: {
+            	data: null
+            }
     }
 
     $urlRouterProvider.otherwise('/');

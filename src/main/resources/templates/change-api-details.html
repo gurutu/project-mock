@@ -3,7 +3,7 @@
         <md-card  style="cursor: pointer" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
             <md-card-title>
                 <md-card-title-text>
-                    <span class="md-headline">PUT :> /v1/mediy/type/slot/man</span>
+                    <span class="md-headline">{{method}} :> {{urlPath}}</span>
                 </md-card-title-text>
             </md-card-title>
         </md-card>
@@ -11,7 +11,8 @@
     <div layout-gt-sm="row" >
         <md-input-container class="md-block" flex-gt-sm>
             <label>Request</label>
-            <textarea  class="md-whiteframe-3dp" style="    background-color: white;" ng-model="user.biography" rows="10" cols="150" md-no-autogrow md-select-on-focus></textarea>
+            <textarea  class="md-whiteframe-3dp" ng-change="formatJsonRequest(request)" style="    background-color: white;" ng-model="request" rows="10" cols="150" md-no-autogrow md-select-on-focus>
+            {{request}}</textarea>
         </md-input-container>
 
         <div flex="3" hide-xs hide-sm>
@@ -20,14 +21,15 @@
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Response</label>
-            <textarea  class="md-whiteframe-3dp" style="    background-color: white;" ng-model="user.biography" rows="10" cols="150" md-no-autogrow md-select-on-focus></textarea>
+            <textarea  class="md-whiteframe-3dp" ng-change="formatJsonResponse(response)" style="    background-color: white;" ng-model="response" rows="10" cols="150" md-no-autogrow md-select-on-focus>
+            {{response}}</textarea>
         </md-input-container>
 
 
     </div>
     <div flex="7"  layout-align="end end">
         <div layout="row" layout-align="end end" style="margin-top: 98px;">
-            <md-button ng-click="goToChangeApiDetails()" class="md-raised md-primary">Publish</md-button>
+            <md-button ng-click="publishData(method,urlPath,request,response);" class="md-raised md-primary">Publish</md-button>
         </div>
 
     </div>
