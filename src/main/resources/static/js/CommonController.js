@@ -7,7 +7,7 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
      $scope.goToApiDetails=function(){
     	var object={"object":this.item}
     	StoreService.pushSearchData(this.item);
-         $state.go('api-detail',{data:object});
+         $state.go('api-detail',{data:{"value":this.item.value,"display":this.item.display}});
      }
      $scope.clickedRelative=function(method,path){
     	 $state.go('api-detail',{data:{"value":method,"display":path}});
@@ -16,7 +16,34 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
      $scope.selectedAutoSearch=function(method,uriPath){
     	 //CommonService.searchbyUriandmethod
      }
+     $scope.publishData=function(method,urlPath,request,response){
+     	var data={
+     			  "urlPath":urlPath,
+     			  "method":method,
+     			  "request":request,
+     			  "response":response
+     	}
+     	var config={"Content-Type":"application/json"};
+     	CommonService.saveDate(data,config).then(function(response){
+     		console.log(response.data);
+     	});
+     }
 
+     $scope.createNewApi=function(param){
+    	 $scope.createNew=param;
+     }
+     
+     $scope.formatJsonResponse=function(res){
+     	try{
+     		$scope.responseModal=JSON.stringify(JSON.parse(res), null, 2);
+     	}catch(err){console.log(err);}	
+     }
+     $scope.formatJsonRequest=function(request){
+     	try{
+     		$scope.requestModal=JSON.stringify(JSON.parse(request), null, 2);
+     	}catch(err){console.log(err);}
+     	
+     }
 
     // ******************************
     // Internal methods
@@ -27,7 +54,7 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
      * remote dataservice call.
      */
     $scope.querySearch =function(query) {
-         var results = query ? $scope.loadAll().filter($scope.createFilterFor(query)) : $scope.loadAll();
+        // var results = query ? $scope.loadAll().filter($scope.createFilterFor(query)) : $scope.loadAll();
      	var data={"searchQuery":query};
      	var searData=[];
      	var config={"Content-Type":"application/json"};
@@ -64,7 +91,7 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
 
 });
 
-app.controller('apiDetailsController',function($scope,$state,CommonService) {
+app.controller('apiDetailsController',function($scope,$state,CommonService,$rootScope) {
     $scope.message = 'Hello Welcome To Home Page';
     $scope.publishbutton=false;
     $scope.method="";
@@ -85,7 +112,7 @@ app.controller('apiDetailsController',function($scope,$state,CommonService) {
     $scope.formatJsonResponse=function(res){
     	try{
     		$scope.responseModal=JSON.stringify(JSON.parse(res), null, 2);
-    	}catch(err){}	
+    	}catch(err){console.log(err);}	
     }
     
     $scope.convertInJson=function(data){
@@ -94,7 +121,7 @@ app.controller('apiDetailsController',function($scope,$state,CommonService) {
     $scope.formatJson=function(request){
     	try{
     		$scope.requestModal=JSON.stringify(JSON.parse(request), null, 2);
-    	}catch(err){}
+    	}catch(err){console.log(err);}
     	
     }
 
@@ -110,7 +137,9 @@ app.controller('apiDetailsController',function($scope,$state,CommonService) {
     	
     	 $scope.method=$state.params.data.value;
         $scope.urlPath=$state.params.data.display;
-    	CommonService.searchbyUriandmethod($state.params.data).then(function (response) {
+      
+        var config={"Content-Type":"application/json"};
+    	CommonService.searchbyUriandmethod($state.params.data,config).then(function (response) {
     		$scope.requestData=response.data;
     	});
     }

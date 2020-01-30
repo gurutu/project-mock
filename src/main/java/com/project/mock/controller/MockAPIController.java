@@ -195,7 +195,7 @@ public class MockAPIController {
 	
 	@RequestMapping(value = "/project-mock/searchbyUriandmethod", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
 		"application/json" })
-	public List<ApiMongoTemplate> searchByUriAndMethod(@RequestBody Map<String, Object> payload, HttpServletRequest request) {
+	public List<ApiMongoTemplate> searchByUriAndMethod(@RequestBody Map<String, String> payload, HttpServletRequest request) {
 	return apiDataMongoRepository.findByUrlPathAndMethod( payload.get("display").toString(), payload.get("value").toString());
 	}
 	

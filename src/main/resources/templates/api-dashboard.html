@@ -5,61 +5,108 @@
     <title>Title</title>
 </head>
 <body >
-<div layout="row" layout-xs="column">
-  <div flex="90">
-  
-<md-autocomplete
-                 md-no-cache="noCache"
-                 md-selected-item="selectedItem"
-                 md-search-text="searchText"
-                 md-items="item in querySearch(searchText)"
-                 md-item-text="item.display"
-                 md-escape-options="clear"
-                 md-require-match=""
+	<div ng-show="!createNew">
+		<div layout="row" layout-xs="column">
+			<div flex="90">
 
-                 placeholder="Search Api EndPoint"
-                 input-aria-describedby="favoriteStateLabel"
+				<md-autocomplete md-no-cache="noCache"
+					md-selected-item="selectedItem" md-search-text="searchText"
+					md-items="item in querySearch(searchText)"
+					md-item-text="item.display" md-escape-options="clear"
+					md-require-match="" placeholder="Search Api EndPoint"
+					input-aria-describedby="favoriteStateLabel">
+				<md-item-template> <span class="item-metadata"
+					ng-click="goToApiDetails()"> <span> <strong>{{item.value}}
+							:> </strong>
+				</span> <span> <span md-highlight-text="searchText">{{item.display}}</span>
+				</span>
+				</span> </md-item-template>
+				<div ng-messages="searchForm.autocompleteField.$error"
+					ng-if="searchForm.autocompleteField.$touched">
+					<div ng-message="required">
+						You <b>must</b> have a favorite state.
+					</div>
+					<div ng-message="md-require-match">Please select an existing
+						state.</div>
+					<div ng-message="minlength">Your entry is not long enough.</div>
+					<div ng-message="maxlength">Your entry is too long.</div>
+				</div>
 
->
-    <md-item-template>
-        <span class="item-metadata" ng-click="goToApiDetails()">
-            <span>
-              <strong>{{item.value}} :> </strong>
-            </span>
-            <span>
-             <span md-highlight-text="searchText">{{item.display}}</span>
-            </span>
-          </span>
-        
-    </md-item-template>
-    <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
-        <div ng-message="required">You <b>must</b> have a favorite state.</div>
-        <div ng-message="md-require-match">Please select an existing state.</div>
-        <div ng-message="minlength">Your entry is not long enough.</div>
-        <div ng-message="maxlength">Your entry is too long.</div>
-    </div>
-
-</md-autocomplete>
-  </div>
-   <div flex="3">
-   </div>
-  <div flex="" style="margin-top: -4px;">
- <md-button class="md-raised md-primary">Create New API</md-button>
-  </div>
-</div>
+				</md-autocomplete>
+			</div>
+			<div flex="3"></div>
+			<div flex="" style="margin-top: -4px;">
+				<md-button class="md-raised md-primary"
+					ng-click="createNewApi(true)">Create New API</md-button>
+			</div>
+		</div>
 
 
 
-<h3 ng-if="searchRelativeData.length>0">Related Searched Api </h3>
-<div ng-repeat="data in searchRelativeData track by $index ">
-    <md-card ng-click="clickedRelative(data.value,data.display)" style="cursor: pointer" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
-        <md-card-title>
-            <md-card-title-text>
-                <span class="md-headline">{{data.value}} :> {{data.display}}</span>
-            </md-card-title-text>
-        </md-card-title>
-    </md-card>
-</div>
+		<h3 ng-if="searchRelativeData.length>0">Related Searched Api</h3>
+		<div ng-repeat="data in searchRelativeData track by $index ">
+			<md-card ng-click="clickedRelative(data.value,data.display)"
+				style="cursor: pointer"
+				md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}"
+				md-theme-watch> <md-card-title> <md-card-title-text>
+			<span class="md-headline">{{data.value}} :> {{data.display}}</span> </md-card-title-text>
+			</md-card-title> </md-card>
+		</div>
+	</div>
+	<!-- create Api UI -->
+	<div ng-show="createNew">
+	<h2>Create New Api</h2>
+		<div>
+			<div>
+				<md-card style="cursor: pointer"
+					md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}"
+					md-theme-watch> <md-card-content>
+				<div layout="row" layout-xs="column">
+					<div flex="10">
+						<md-select ng-model="method" placeholder="Method"
+							class="md-no-underline"> <md-option value="GET">GET</md-option>
+						<md-option value="PUT">PUT</md-option> <md-option value="POST">POST</md-option>
+						<md-option value="PATCH">PATCH</md-option> <md-option
+							value="DELETE">DELETE</md-option> <md-option value="HEAD">HEAD</md-option>
+						<md-option value="TRACE">TRACE</md-option> <md-option
+							value="OPTIONS">OPTIONS</md-option> </md-select>
+					</div>
+					<div flex="">
+						<md-input-container class="md-block" flex-gt-sm>
+						<label>API ENDPOINT</label> <input ng-model="urlPath">
+						</md-input-container>
+					</div>
+				</div>
+				</md-card-content> </md-card>
+			</div>
+			<div layout-gt-sm="row">
+				<md-input-container class="md-block" flex-gt-sm>
+				<label>Request</label> <textarea class="md-whiteframe-3dp"
+					style="background-color: white;" ng-model="requestModal" ng-change="formatJsonRequest(requestModal)"
+					rows="10" cols="150" md-no-autogrow md-select-on-focus>{{requestModal}}</textarea>
+				</md-input-container>
+
+				<div flex="3" hide-xs hide-sm>
+					<!-- Spacer //-->
+				</div>
+
+				<md-input-container class="md-block" flex-gt-sm>
+				<label>Response</label> <textarea class="md-whiteframe-3dp"
+					style="background-color: white;" ng-model="responseModal" ng-change="formatJsonResponse(responseModal)"
+					rows="10" cols="150" md-no-autogrow md-select-on-focus>{{responseModal}}</textarea>
+				</md-input-container>
+
+
+			</div>
+			<div flex="7" layout-align="end end">
+				<div layout="row" layout-align="end end" style="margin-top: 10px;">
+					<md-button ng-click="publishData(method,urlPath,requestModal,responseModal);createNewApi(false);"
+						class="md-raised md-primary">Publish</md-button>
+				</div>
+
+			</div>
+		</div>
+	</div>
 
 
 </body>
