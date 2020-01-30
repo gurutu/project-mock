@@ -10,6 +10,11 @@ public class MockUIController {
 	public String welcome() {
 		return "home";
 	}
+	
+	@RequestMapping("/format-json")
+	public String formatJson() {
+		return "JsonFormat";
+	}
 
 	@RequestMapping("/api-dashboard")
 	public String apiDashboard() {
