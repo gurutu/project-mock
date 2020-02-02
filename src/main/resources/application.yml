@@ -18,4 +18,5 @@ logging:
     com.project: DEBUG
     org.springframework.web: INFO
     org.springframework.security: INFO
-
+    
+server:  port: 6969
