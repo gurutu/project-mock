@@ -3,7 +3,7 @@
     <div layout-gt-sm="row" >
         <md-input-container class="md-block" flex-gt-sm  >
             <label>Request</label>
-            <textarea  class="md-whiteframe-3dp" ng-change="formatJson(requestModal)" style="    background-color: white;" ng-model="requestModal" rows="10" cols="150" md-no-autogrow md-select-on-focus>
+            <textarea ng-disabled="checkMethod(method)"  class="md-whiteframe-3dp" ng-change="formatJson(requestModal)" style="    background-color: white;" ng-model="requestModal" rows="10" cols="150" md-no-autogrow md-select-on-focus>
            {{requestModal}}
             </textarea>
         </md-input-container>

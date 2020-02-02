@@ -181,8 +181,8 @@ public class MockAPIController {
 			"application/json" })
 	public Map<String, String> sendDataToDatabase(@RequestBody ApiDataPojo map, HttpServletRequest request) {
 		//map.forEach(e -> {
-			apiDataMongoRepository
-					.save(new ApiMongoTemplate(map.getUrlPath(), map.getMethod(), map.getRequest(), map.getResponse()));
+		apiDataService
+					.saveData(new ApiMongoTemplate(map.getUrlPath(), map.getMethod(), map.getRequest(), map.getResponse()));
 		//});
 		return new HashMap<>();
 	}
@@ -190,20 +190,32 @@ public class MockAPIController {
 	@RequestMapping(value = "/project-mock/search", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
 			"application/json" })
 	public List<ApiMongoTemplate> getData(@RequestBody Map<String, Object> payload, HttpServletRequest request) {
-		return apiDataMongoRepository.findEmployeeByName(payload.get("searchQuery").toString());
+		return apiDataService.findEmployeeByName(payload.get("searchQuery").toString());
 	}
 	
 	@RequestMapping(value = "/project-mock/searchbyUriandmethod", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
 		"application/json" })
 	public List<ApiMongoTemplate> searchByUriAndMethod(@RequestBody Map<String, String> payload, HttpServletRequest request) {
-	return apiDataMongoRepository.findByUrlPathAndMethod( payload.get("display").toString(), payload.get("value").toString());
+	return apiDataService.findByUrlPathAndMethod( payload.get("display").toString(), payload.get("value").toString());
 	}
-	
+
 	@RequestMapping(value = "/project-mock/searchbyid", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
-	"application/json" })
-public ApiMongoTemplate searchById(@RequestBody Map<String, String> payload, HttpServletRequest request) {
-return apiDataMongoRepository.findById(payload.get("Id")).get();
-}
+			"application/json" })
+	public ApiMongoTemplate searchById(@RequestBody Map<String, String> payload, HttpServletRequest request) {
+		return apiDataService.findById(payload.get("Id"));
+	}
+
+	@RequestMapping(value = "/project-mock/deletebyid", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
+			"application/json" })
+	public boolean deleteById(@RequestBody Map<String, String> payload, HttpServletRequest request) {
+		return apiDataService.deleteById(payload.get("id"));
+	}
+
+	@RequestMapping(value = "/project-mock/deletebyUrlAndMethod", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
+			"application/json" })
+	public boolean deleteByUrlAndMethod(@RequestBody Map<String, String> payload, HttpServletRequest request) {
+		return apiDataService.deleteByUrlAndMethod(payload.get("url"), payload.get("method"));
+	}
 	
 
 	@RequestMapping(value = "/js/**", method = RequestMethod.GET)

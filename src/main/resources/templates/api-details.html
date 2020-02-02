@@ -1,12 +1,23 @@
 <div>
     <div >
-        <md-card ng-click="goToApiDetails()" style="cursor: pointer" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+		<div layout="row" layout-xs="column">
+			<div flex="85">
+			<md-card ng-click="goToApiDetails()" style="cursor: pointer" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
             <md-card-title>
                 <md-card-title-text>
                     <span class="md-headline">{{method}} :> {{urlPath}}</span>
                 </md-card-title-text>
             </md-card-title>
         </md-card>
+				</div>
+				<div flex="">
+				</div>
+			<div flex="15">
+			 <md-button  class="md-raised md-primary" ng-click="deleteByUrlAndMethod(urlPath,method)">DELETE ENDPOINT</md-button>
+           
+			</div>
+		</div>
+		
     </div>
     <div layout-gt-sm="row" ng-repeat="data in requestData track by $index " >
         <md-input-container class="md-block" flex-gt-sm>
@@ -26,8 +37,13 @@
         </md-input-container>
 
         <div flex="7"  layout-align="end end">
-            <div layout="row" layout-align="end end" style="margin-top: 98px;">
-                <md-button ng-click="goToChangeApiDetails(data.request,data.response)" class="md-raised md-primary">Edit</md-button>
+        <div layout="row" layout-align="end end" style="margin-top: 58px;">
+         <md-button ng-click="goToChangeApiDetails(data.request,data.response)" class="md-raised md-primary">Edit</md-button>
+             
+        </div><br>
+            <div layout="row" layout-align="end end" style="margin-top: 5px;">
+            
+                <md-button ng-click="deleteById(data.id)" class="md-raised md-primary">DELETE</md-button>
             </div>
 
         </div>

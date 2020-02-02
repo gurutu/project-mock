@@ -58,7 +58,7 @@
 	<h2>Create New Api</h2>
 		<div>
 			<div>
-				<md-card style="cursor: pointer"
+				<md-card 
 					md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}"
 					md-theme-watch> <md-card-content>
 				<div layout="row" layout-xs="column">
@@ -73,15 +73,15 @@
 					</div>
 					<div flex="">
 						<md-input-container class="md-block" flex-gt-sm>
-						<label>API ENDPOINT</label> <input ng-model="urlPath">
-						</md-input-container>
+						<label>API ENDPOINT</label> <input ng-model="urlPath"> </md-input-container>
 					</div>
 				</div>
-				</md-card-content> </md-card>
+				</md-card-content> <md-card-actions layout="row" layout-align="end center">
+				<md-button class="md-raised md-primary" ng-click="searchByUrlAndMethod(method,urlPath)">Check EndPoint</md-button> </md-card-actions> </md-card>
 			</div>
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-sm>
-				<label>Request</label> <textarea class="md-whiteframe-3dp"
+				<label>Request</label> <textarea class="md-whiteframe-3dp" ng-disabled="checkMethod(method)"
 					style="background-color: white;" ng-model="requestModal" ng-change="formatJsonRequest(requestModal)"
 					rows="10" cols="150" md-no-autogrow md-select-on-focus>{{requestModal}}</textarea>
 				</md-input-container>

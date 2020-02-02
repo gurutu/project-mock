@@ -18,4 +18,13 @@ public interface ApiMockService {
 	List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request);
 
 	List<ApiMongoTemplate> findByUrlPathAndMethod(String urlPath, String method);
+	
+	
+	ApiMongoTemplate findById(String id);
+	
+	boolean saveData(ApiMongoTemplate data);
+	
+	boolean deleteById(String id);
+	
+	boolean deleteByUrlAndMethod(String url,String method);
 }

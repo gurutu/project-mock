@@ -29,6 +29,17 @@ public class ApiMongoTemplate {
 			this.request = request;
 			this.response = response;
 		}
+		
+		public ApiMongoTemplate(String id,String urlPath, String method, String request, String response) {
+			super();
+			this.id=id;
+			this.urlPath = urlPath;
+			this.method = method;
+			this.request = request;
+			this.response = response;
+		}
+		
+		
 		public String getId() {
 			return id;
 		}
