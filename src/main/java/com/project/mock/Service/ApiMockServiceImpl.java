@@ -63,6 +63,9 @@ public class ApiMockServiceImpl implements ApiMockService {
 		return apiDataMongoRepository.findByUrlPathAndMethod(urlPath, method);
 	}
 	private static boolean jsonCompare(String s1,String s2)  {
+		if(s1==null&&s2==null) {
+			return true;
+		}
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode tree1;
 		JsonNode tree2 ;
@@ -87,15 +90,20 @@ public class ApiMockServiceImpl implements ApiMockService {
 	@Override
 	public boolean saveData(ApiMongoTemplate data) {
 		boolean flag=true;
+		String id="";
 		List<ApiMongoTemplate> findByUrlPathAndMethod = this.findByUrlPathAndMethod(data.getUrlPath(),data.getMethod());
 		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {
 			if(jsonCompare(data.getRequest(),apiMongoTemplate.getRequest())) {
 				flag=false;
+				id=apiMongoTemplate.getId();
 				break;
 			}
 		}
 		if(flag) {
 			apiDataMongoRepository.save(data);
+			}else {
+				data.setId(id);
+				apiDataMongoRepository.save(data);
 			}
 		return flag;
 	}

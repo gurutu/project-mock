@@ -1,5 +1,8 @@
 package com.project.mock.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,10 +16,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,6 +50,9 @@ public class MockAPIController {
 
 	@Autowired
 	private MongoOperations mongoOperations;
+	
+	@Autowired
+	ResourceLoader resourceLoader;
 
 	/**
 	 * @implNote PostAPI CAll for User
@@ -219,33 +228,40 @@ public class MockAPIController {
 	
 
 	@RequestMapping(value = "/js/**", method = RequestMethod.GET)
-	public byte[] getJSFile(HttpServletRequest request) {
-		Path path = Paths.get(".\\src\\main\\resources\\static\\" + request.getRequestURI());
+	public byte[] getJSFile(HttpServletRequest request) throws Exception {
+		
+		Resource resource = resourceLoader.getResource("classpath:static" + request.getRequestURI());
+	    InputStream inputStream = resource.getInputStream();
+		
 		byte[] bytes = null;
 		try {
-			bytes = Files.readAllBytes(path);
+			bytes =FileCopyUtils.copyToByteArray(inputStream);// Files.readAllBytes(path);
 		} catch (Exception e) {
 		}
 		return bytes;
 	}
 
 	@RequestMapping(value = "/css/**", method = RequestMethod.GET)
-	public byte[] getCSSFile(HttpServletRequest request) {
-		Path path = Paths.get(".\\src\\main\\resources\\static\\" + request.getRequestURI());
+	public byte[] getCSSFile(HttpServletRequest request) throws Exception {
+		Resource resource = resourceLoader.getResource("classpath:static" + request.getRequestURI());
+	    InputStream inputStream = resource.getInputStream();
+		
 		byte[] bytes = null;
 		try {
-			bytes = Files.readAllBytes(path);
+			bytes =FileCopyUtils.copyToByteArray(inputStream);// Files.readAllBytes(path);
 		} catch (Exception e) {
 		}
 		return bytes;
 	}
 
 	@RequestMapping(value = "/img/**", method = RequestMethod.GET)
-	public byte[] getImageFile(HttpServletRequest request) {
-		Path path = Paths.get(".\\src\\main\\resources\\static\\" + request.getRequestURI());
+	public byte[] getImageFile(HttpServletRequest request) throws Exception {
+		Resource resource = resourceLoader.getResource("classpath:static" + request.getRequestURI());
+	    InputStream inputStream = resource.getInputStream();
+		
 		byte[] bytes = null;
 		try {
-			bytes = Files.readAllBytes(path);
+			bytes =FileCopyUtils.copyToByteArray(inputStream);// Files.readAllBytes(path);
 		} catch (Exception e) {
 		}
 		return bytes;

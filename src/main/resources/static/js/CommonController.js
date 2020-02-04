@@ -201,7 +201,7 @@ app.controller('apiDetailsController',function($scope,$state,CommonService,$root
     $scope.init();
 });
 
-app.controller('changeApiDetailsController',function($scope,$state,CommonService,UtilService) {
+app.controller('changeApiDetailsController',function($scope,$state,CommonService,UtilService,ToastService) {
     $scope.message = 'Hello Welcome To Home Page';
     if($state.params.data==null){
     	$state.go('hello');
@@ -223,9 +223,13 @@ app.controller('changeApiDetailsController',function($scope,$state,CommonService
     			  "request":request,
     			  "response":response
     	}
+    	
+    	if(request="null")delete data.request;
+    	
     	var config={"Content-Type":"application/json"};
     	CommonService.saveDate(data,config).then(function(response){
     		console.log(response.data);
+    		ToastService.simpleToast("You Data has been Published.")
     	});
     }
     $scope.formatJsonResponse=function(res){
