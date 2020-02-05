@@ -15,12 +15,12 @@
 					md-item-text="item.display" md-escape-options="clear"
 					md-require-match="" placeholder="Search Api EndPoint"
 					input-aria-describedby="favoriteStateLabel">
-				<md-item-template> <span class="item-metadata"
-					ng-click="goToApiDetails()"> <span> <strong>{{item.value}}
+				<md-item-template ><div ng-click="goToApiDetails()"> <span class="item-metadata" ng-click="goToApiDetails()"
+					> <span> <strong>{{item.value}}
 							:> </strong>
 				</span> <span> <span md-highlight-text="searchText">{{item.display}}</span>
 				</span>
-				</span> </md-item-template>
+				</span> </div></md-item-template>
 				<div ng-messages="searchForm.autocompleteField.$error"
 					ng-if="searchForm.autocompleteField.$touched">
 					<div ng-message="required">
