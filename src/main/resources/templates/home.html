@@ -18,10 +18,29 @@
 </head>
 <body ng-app="projectmock"   ng-cloak>
 <div class="container">
-    <a ui-sref="hello">Home Page</a> ||||
+ <md-toolbar>
+      <div class="md-toolbar-tools">
+        <a ui-sref="hello"><md-button aria-label="Go Back">
+          Home Page
+        </md-button>
+        </a>
+
+        <h2 flex md-truncate>Project Mock [v1.0]</h2>
+       <!--  <md-button class="md-raised md-accent md-hue-3" aria-label="Learn More">
+          Learn More
+        </md-button> -->
+        <a href="/format-json" target="_blank">
+        <md-button class="" aria-label="Favorite">
+         Json Format
+        </md-button>
+        </a>
+      </div>
+    </md-toolbar>
+    <br>
+   <!--  <a ui-sref="hello">Home Page</a> ||||
    
     <a href="/format-json" target="_blank">Json_Format</a><br>
-    <br>
+    <br> -->
     
     <!-- include image from static resources -->
     <ui-view></ui-view>
