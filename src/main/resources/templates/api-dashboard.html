@@ -81,8 +81,8 @@
 							value="OPTIONS">OPTIONS</md-option> </md-select>
 					</div>
 					<div flex="">
-						<md-input-container class="md-block" flex-gt-sm>
-						<label>API ENDPOINT</label> <input ng-model="urlPath">{{hostName}} </md-input-container>
+						<md-input-container class="md-block" flex-gt-sm >
+						<label>API ENDPOINT</label> <input ng-model="urlPath" placeholder="/v1/projectmock/hello"> </md-input-container>
 					</div>
 				</div>
 				</md-card-content> <md-card-actions layout="row" layout-align="end center">
@@ -90,7 +90,7 @@
 			</div>
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-sm>
-				<label>Request</label> <textarea class="md-whiteframe-3dp" ng-disabled="checkMethod(method)"
+				<label>Request</label> <textarea  placeholder="{{requestPlaceholder}}"  class="md-whiteframe-3dp" ng-disabled="checkMethod(method)"
 					style="background-color: white;color: blue;" ng-model="requestModal" ng-change="formatJsonRequest(requestModal)"
 					rows="10" cols="150" md-no-autogrow md-select-on-focus>{{requestModal}}</textarea>
 				</md-input-container>
@@ -100,7 +100,7 @@
 				</div>
 
 				<md-input-container class="md-block" flex-gt-sm>
-				<label>Response</label> <textarea class="md-whiteframe-3dp"
+				<label>Response</label> <textarea class="md-whiteframe-3dp" placeholder="{{responsePlaceholder}}"
 					style="background-color: white;color: blue;" ng-model="responseModal" ng-change="formatJsonResponse(responseModal)"
 					rows="10" cols="150" md-no-autogrow md-select-on-focus>{{responseModal}}</textarea>
 				</md-input-container>

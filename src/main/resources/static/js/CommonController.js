@@ -3,6 +3,18 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
     $scope.message = 'Hello Welcome To Home Page';
     //ToastService.simpleToast("API Request & Response has been  Deleted");
     $rootScope.hostName=window.location.origin;
+    $rootScope.requestPlaceholder=JSON.stringify({
+    	   "message": "Put some JSON in the text box.",
+    	   "error": null,
+    	   "year": 2020,
+    	   "ios": false
+    	}, null, 2);
+    $rootScope.responsePlaceholder=JSON.stringify({
+ 	   "message": "Put some JSON in the text box.",
+ 	   "error": null,
+ 	   "year": 2020,
+ 	   "ios": false
+ 	}, null, 2);
      $scope.selectedItem="";
      $scope.searchRelativeData=StoreService.getSearchData()?JSON.parse(StoreService.getSearchData()).reverse():[];
 
@@ -36,7 +48,7 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
      }
      
      $scope.publishData=function(method,urlPath,request,response){
-    	 if(request!=undefined&&response!=undefined){
+    	 if(request!=undefined||response!=undefined){
      	var data={
      			  "urlPath":urlPath,
      			  "method":method,
@@ -127,7 +139,7 @@ app.controller('apiDetailsController',function($scope,$state,CommonService,$root
     $scope.urlPath="";
     $scope.requestData;
     $scope.publishData=function(method,urlPath,request,response){
-    	if(request!=undefined&&response!=undefined){
+    	if(request!=undefined||response!=undefined){
     	var data={
     			  "urlPath":urlPath,
     			  "method":method,
@@ -221,7 +233,7 @@ app.controller('changeApiDetailsController',function($scope,$state,CommonService
     $scope.request=$scope.convertInJson($state.params.data.request);
     $scope.response=$scope.convertInJson($state.params.data.response);
     $scope.publishData=function(method,urlPath,request,response){
-    	if(request!=undefined&&response!=undefined){
+    	if(request!=undefined||response!=undefined){
     	var data={
     			  "urlPath":urlPath,
     			  "method":method,

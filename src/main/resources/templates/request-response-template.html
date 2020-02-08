@@ -3,7 +3,7 @@
     <div layout-gt-sm="row" >
         <md-input-container class="md-block" flex-gt-sm  >
             <label>Request</label>
-            <textarea ng-disabled="checkMethod(method)"  class="md-whiteframe-3dp" ng-change="formatJson(requestModal)" style="    background-color: white;color: blue;" ng-model="requestModal" rows="10" cols="150" md-no-autogrow md-select-on-focus>
+            <textarea ng-disabled="checkMethod(method)" placeholder="{{requestPlaceholder}}" class="md-whiteframe-3dp" ng-change="formatJson(requestModal)" style="    background-color: white;color: blue;" ng-model="requestModal" rows="10" cols="150" md-no-autogrow md-select-on-focus>
            {{requestModal}}
             </textarea>
         </md-input-container>
@@ -14,7 +14,7 @@
 
         <md-input-container class="md-block" flex-gt-sm >
             <label>Response</label>
-            <textarea  class="md-whiteframe-3dp" ng-change="formatJsonResponse(responseModal)" style="    background-color: white;color: blue;" ng-model="responseModal" rows="10" cols="150" md-no-autogrow md-select-on-focus>
+            <textarea placeholder="{{responsePlaceholder}}" class="md-whiteframe-3dp" ng-change="formatJsonResponse(responseModal)" style="    background-color: white;color: blue;" ng-model="responseModal" rows="10" cols="150" md-no-autogrow md-select-on-focus>
            {{responseModal}}
             </textarea>
         </md-input-container>
