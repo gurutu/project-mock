@@ -21,7 +21,10 @@ public class ApiMongoTemplate {
 	    public ApiMongoTemplate() {
 			// TODO Auto-generated constructor stub
 		}
-	    
+	    public ApiMongoTemplate(String urlPath, String method) {
+	    	this.urlPath = urlPath;
+			this.method = method;
+		}
 		public ApiMongoTemplate(String urlPath, String method, String request, String response) {
 			super();
 			this.urlPath = urlPath;

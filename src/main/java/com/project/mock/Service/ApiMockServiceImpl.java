@@ -3,9 +3,14 @@ package com.project.mock.Service;
 import  org.junit.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -34,7 +39,14 @@ public class ApiMockServiceImpl implements ApiMockService {
 	@Override
 	public List<ApiMongoTemplate> findEmployeeByName(String url) {
 		// TODO Auto-generated method stub
-		return apiDataMongoRepository.findEmployeeByName(url);
+		List<ApiMongoTemplate> list=new ArrayList<>();
+		List<ApiMongoTemplate> findEmployeeByName = apiDataMongoRepository.findEmployeeByName(url);
+		for (ApiMongoTemplate apiMongoTemplate : findEmployeeByName) {
+			if(!list.parallelStream().anyMatch(a -> a.getUrlPath().equals(apiMongoTemplate.getUrlPath())&&a.getMethod().equals(apiMongoTemplate.getMethod()))) {
+				list.add(apiMongoTemplate);
+			}
+		}
+		return  list;
 	}
 
 	@Override

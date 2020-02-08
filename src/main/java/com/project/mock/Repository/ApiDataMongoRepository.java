@@ -12,7 +12,8 @@ public interface ApiDataMongoRepository extends MongoRepository<ApiMongoTemplate
 
 	List<ApiMongoTemplate> findByUrlPath(String replace);
 
-	@Query("{'urlPath': {$regex: '.*?0.*'} }")
+	//@Query("{'urlPath': {$regex: '.*?0.*'}},{$group:{_id:'$urlPath',urlPath: {$first: '$urlPath'}} }")
+	@Query("{'urlPath': {$regex: '.*?0.*'}}")
 	List<ApiMongoTemplate> findEmployeeByName(String url);
 
 	List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request);
