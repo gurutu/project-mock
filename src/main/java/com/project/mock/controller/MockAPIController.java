@@ -126,11 +126,13 @@ public class MockAPIController {
 
 	@RequestMapping(value = "/**", method = RequestMethod.DELETE, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject deleteDataToData(HttpServletRequest request) throws ParseException {
+	public JSONObject deleteDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
+			throws ParseException {
+		JSONObject jsonObject = new JSONObject(map);
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethod(request.getRequestURI() + uri, "DELETE");
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "DELETE", jsonObject.toString());
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -154,11 +156,13 @@ public class MockAPIController {
 
 	@RequestMapping(value = "/**", method = RequestMethod.TRACE, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject traceApi(HttpServletRequest request) throws ParseException {
+	public JSONObject traceDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
+			throws ParseException {
+		JSONObject jsonObject = new JSONObject(map);
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethod(request.getRequestURI() + uri, "TRACE");
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "TRACE", jsonObject.toString());
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -168,11 +172,13 @@ public class MockAPIController {
 
 	@RequestMapping(value = "/**", method = RequestMethod.OPTIONS, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject optionApi(HttpServletRequest request) throws ParseException {
+	public JSONObject optionDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
+			throws ParseException {
+		JSONObject jsonObject = new JSONObject(map);
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethod(request.getRequestURI() + uri, "OPTIONS");
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "OPTIONS", jsonObject.toString());
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()

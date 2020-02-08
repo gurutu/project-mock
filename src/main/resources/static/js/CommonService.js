@@ -47,7 +47,7 @@ app.service('ToastService',function($mdToast){
 });
 app.service('UtilService',function () {
 	this.checkMethod=(method)=>{
-		if(method==='GET'||method==='DELETE'||method==='HEAD'||method==='OPTION'||method==='TRACE'){
+		if(method==='GET'||method==='HEAD'){
 			return true;
 		}else{
 			return false;
