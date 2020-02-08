@@ -2,10 +2,13 @@
     <div >
 		<div layout="row" layout-xs="column">
 			<div flex="85">
-			<md-card ng-click="goToApiDetails()" style="cursor: pointer" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+			<md-card ng-click="goToApiDetails()"  md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
             <md-card-title>
                 <md-card-title-text>
-                    <span class="md-headline">{{method}} :> {{urlPath}}</span>
+                	<div class="md-headline">
+			<span  style="color: darkorchid;">{{method}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span >{{hostName}}{{urlPath}}</span>
+			</div>
                 </md-card-title-text>
             </md-card-title>
         </md-card>

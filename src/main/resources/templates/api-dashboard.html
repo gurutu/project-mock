@@ -49,7 +49,11 @@
 				style="cursor: pointer"
 				md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}"
 				md-theme-watch> <md-card-title> <md-card-title-text>
-			<span class="md-headline">{{data.value}} :> {{data.display}}</span> </md-card-title-text>
+			<div class="md-headline">
+			<span  style="color: darkorchid;">{{data.value}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span >{{hostName}}{{data.display}}</span>
+			</div>
+			 </md-card-title-text>
 			</md-card-title> </md-card>
 		</div>
 	</div>

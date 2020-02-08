@@ -1,8 +1,8 @@
 var app=angular.module('projectmock');
-app.controller('apiDashboardController',function($scope,$timeout, $q,$state,CommonService,StoreService,ToastService,UtilService) {
+app.controller('apiDashboardController',function($scope,$timeout, $q,$state,CommonService,StoreService,ToastService,UtilService,$rootScope) {
     $scope.message = 'Hello Welcome To Home Page';
     //ToastService.simpleToast("API Request & Response has been  Deleted");
-    
+    $rootScope.hostName=window.location.origin;
      $scope.selectedItem="";
      $scope.searchRelativeData=StoreService.getSearchData()?JSON.parse(StoreService.getSearchData()).reverse():[];
 
@@ -36,6 +36,7 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
      }
      
      $scope.publishData=function(method,urlPath,request,response){
+    	 if(request!=undefined&&response!=undefined){
      	var data={
      			  "urlPath":urlPath,
      			  "method":method,
@@ -47,6 +48,7 @@ app.controller('apiDashboardController',function($scope,$timeout, $q,$state,Comm
      		console.log(response.data);
      		ToastService.simpleToast("Your API has been created Successfull.");
      	});
+    	 }
      }
 
      $scope.createNewApi=function(param){
@@ -125,6 +127,7 @@ app.controller('apiDetailsController',function($scope,$state,CommonService,$root
     $scope.urlPath="";
     $scope.requestData;
     $scope.publishData=function(method,urlPath,request,response){
+    	if(request!=undefined&&response!=undefined){
     	var data={
     			  "urlPath":urlPath,
     			  "method":method,
@@ -136,6 +139,7 @@ app.controller('apiDetailsController',function($scope,$state,CommonService,$root
     		console.log(response.data);
     		 ToastService.simpleToast("API Request & Response has been  Created SuccessFull");
     	});
+    	}
     }
     $scope.formatJsonResponse=function(res){
     	try{
@@ -217,6 +221,7 @@ app.controller('changeApiDetailsController',function($scope,$state,CommonService
     $scope.request=$scope.convertInJson($state.params.data.request);
     $scope.response=$scope.convertInJson($state.params.data.response);
     $scope.publishData=function(method,urlPath,request,response){
+    	if(request!=undefined&&response!=undefined){
     	var data={
     			  "urlPath":urlPath,
     			  "method":method,
@@ -231,6 +236,7 @@ app.controller('changeApiDetailsController',function($scope,$state,CommonService
     		console.log(response.data);
     		ToastService.simpleToast("You Data has been Published.")
     	});
+    	}
     }
     $scope.formatJsonResponse=function(res){
     	try{
