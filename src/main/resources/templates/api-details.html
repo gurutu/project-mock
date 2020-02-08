@@ -13,7 +13,7 @@
 				<div flex="">
 				</div>
 			<div flex="15">
-			 <md-button  class="md-raised md-primary" ng-click="deleteByUrlAndMethod(urlPath,method)">DELETE ENDPOINT</md-button>
+			 <md-button  class="md-raised md-primary" style="height: 72px !important;width: 93% !important;" ng-click="deleteByUrlAndMethod(urlPath,method)">DELETE ENDPOINT</md-button>
            
 			</div>
 		</div>
@@ -22,7 +22,7 @@
     <div layout-gt-sm="row" ng-repeat="data in requestData track by $index " >
         <md-input-container class="md-block" flex-gt-sm>
             <label>Request</label>
-            <textarea disabled class="md-whiteframe-3dp" style="background-color: white;"  rows="10" cols="150" md-no-autogrow md-select-on-focus 
+            <textarea disabled class="md-whiteframe-3dp" style="background-color: white;color: blue;"  rows="10" cols="150" md-no-autogrow md-select-on-focus 
            >{{convertInJson(data.request)}}</textarea>
         </md-input-container>
 
@@ -32,7 +32,7 @@
 
         <md-input-container class="md-block" flex-gt-sm>
             <label>Response</label>
-            <textarea disabled class="md-whiteframe-3dp" style="    background-color: white;"  rows="10" cols="150" md-no-autogrow md-select-on-focus 
+            <textarea disabled class="md-whiteframe-3dp" style="background-color: white;color: blue;"  rows="10" cols="150" md-no-autogrow md-select-on-focus 
            >{{convertInJson(data.response)}}</textarea>
         </md-input-container>
 

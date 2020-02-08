@@ -224,7 +224,7 @@ app.controller('changeApiDetailsController',function($scope,$state,CommonService
     			  "response":response
     	}
     	
-    	if(request="null")delete data.request;
+    	if(request=="null")delete data.request;
     	
     	var config={"Content-Type":"application/json"};
     	CommonService.saveDate(data,config).then(function(response){

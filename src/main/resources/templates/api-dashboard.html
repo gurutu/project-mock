@@ -82,7 +82,7 @@
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-sm>
 				<label>Request</label> <textarea class="md-whiteframe-3dp" ng-disabled="checkMethod(method)"
-					style="background-color: white;" ng-model="requestModal" ng-change="formatJsonRequest(requestModal)"
+					style="background-color: white;color: blue;" ng-model="requestModal" ng-change="formatJsonRequest(requestModal)"
 					rows="10" cols="150" md-no-autogrow md-select-on-focus>{{requestModal}}</textarea>
 				</md-input-container>
 
@@ -92,14 +92,14 @@
 
 				<md-input-container class="md-block" flex-gt-sm>
 				<label>Response</label> <textarea class="md-whiteframe-3dp"
-					style="background-color: white;" ng-model="responseModal" ng-change="formatJsonResponse(responseModal)"
+					style="background-color: white;color: blue;" ng-model="responseModal" ng-change="formatJsonResponse(responseModal)"
 					rows="10" cols="150" md-no-autogrow md-select-on-focus>{{responseModal}}</textarea>
 				</md-input-container>
 
 
 			</div>
 			<div flex="7" layout-align="end end">
-				<div layout="row" layout-align="end end" style="margin-top: 10px;">
+				<div layout="row" layout-align="end end" >
 					<md-button ng-click="publishData(method,urlPath,requestModal,responseModal);createNewApi(false);"
 						class="md-raised md-primary">Publish</md-button>
 				</div>
