@@ -1,7 +1,14 @@
 package com.project.mock.Service;
 
+import org.json.simple.parser.JSONParser;
+//import org.json.simple.parser.JSONParser;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
+//import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import  org.junit.*;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -25,6 +34,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * 
@@ -140,6 +152,77 @@ public class ApiMockServiceImpl implements ApiMockService {
 		return true;
 	}
 
+	
+	/**
+	 * {"Hello":"hello","Helo":[{"h1":"h2"}]}
+		PATH
+		PARAM
+		BODY
+		B{[h1
+	 * @param args
+	 */
+	private static String find(String value) {
+		if(value.matches("[0-9]+")) {
+			return "D";
+		}else if(value.matches("[a-zA-Z]+")) {
+			return "W";
+		}
+		return "X";
+	}
+	private static void checked(int j,String format,String key, JsonElement jsonElement) {
+		for (int i = j; i < format.length(); i++) {
+			if(format.charAt(i)=='{') {
+				
+				if (jsonElement.isJsonObject()) {
+				   Set<Map.Entry<String, JsonElement>> entrySet = jsonElement
+		                    .getAsJsonObject().entrySet();
+		            for (Map.Entry<String, JsonElement> entry : entrySet) {
+		                String key1 = entry.getKey();
+		                if (key1.equals(key)) {
+		                    list.add(entry.getValue().toString());
+		                }
+		                checked(i,format,key, entry.getValue());
+		             }
+				}
+			}else if(format.charAt(i)=='[') {
+				if (jsonElement.isJsonArray()) {
+				JsonElement jsonElement2 = jsonElement.getAsJsonArray().get(Integer.parseInt(String.valueOf(format.charAt(i+1))));
+								checked(i,format,key, jsonElement2);
+				}
+				}
+			}
+		}
+
+		
+	
+	private static String getValue(String json,String format) throws JsonMappingException, JsonProcessingException, ParseException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonParser  parser = new JsonParser();
+		checked(0,format,"h4",parser.parse(json));
+
+		return "";
+	}
+	private static List<String> findvalueInResponse(String res) {
+		 Pattern pattern = Pattern.compile("\\$\\{([^\\}]+)\\}", Pattern.MULTILINE);
+		 Matcher matcher = pattern.matcher(res);
+         List<String> list=new ArrayList<>();
+		while (matcher.find()) {
+		    System.out.println("Full match: " + matcher.group(0));
+		    list.add(matcher.group(0));
+		    for (int i = 1; i <= matcher.groupCount(); i++) {
+		        System.out.println("Group " + i + ": " + matcher.group(i));
+		    }
+		}
+		return list;
+	}
+
+	
+	static List<String> list = new ArrayList<String>();
+	public static void main(String[] args) throws JsonMappingException, JsonProcessingException, ParseException {
+		
+		getValue("[{\"Hello\":\"hello\",\"Helo\":[{\"h1\":\"h2\",\"h4\":\"h7\"},{\"h1\":\"h4\"}]}]","[0{[0{");
+		list.forEach(a->{System.out.println(a);});
+	}
      
 	
 }

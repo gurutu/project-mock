@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.mock.DataModal.ApiDataPojo;
 import com.project.mock.DataModal.ApiMongoTemplate;
 import com.project.mock.Repository.ApiDataMongoRepository;
@@ -60,16 +63,17 @@ public class MockAPIController {
 	 * @param request
 	 * @return
 	 * @throws ParseException
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/**", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject postDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
-			throws ParseException {
-		JSONObject jsonObject = new JSONObject(map);
-		JSONParser parser = new JSONParser();
+	public JSONObject postDataToDatabase( HttpServletRequest request)
+			throws ParseException, IOException {
+		String res=request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+        JSONParser parser = new JSONParser();		
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "POST", jsonObject.toString()); 
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "POST",res); 
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -79,13 +83,14 @@ public class MockAPIController {
 
 	@RequestMapping(value = "/**", method = RequestMethod.PUT, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject putDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
-			throws ParseException {
-		JSONObject jsonObject = new JSONObject(map);
+	public JSONObject putDataToDatabase( HttpServletRequest request)
+			throws ParseException, IOException {
+		String jsonObject=request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+    
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "PUT", jsonObject.toString());
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "PUT", jsonObject);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -95,13 +100,14 @@ public class MockAPIController {
 
 	@RequestMapping(value = "/**", method = RequestMethod.PATCH, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject patchDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
-			throws ParseException {
-		JSONObject jsonObject = new JSONObject(map);
+	public JSONObject patchDataToDatabase( HttpServletRequest request)
+			throws ParseException, IOException {
+		String jsonObject=request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+	    
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "PATCH", jsonObject.toString());
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "PATCH", jsonObject);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -126,13 +132,14 @@ public class MockAPIController {
 
 	@RequestMapping(value = "/**", method = RequestMethod.DELETE, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject deleteDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
-			throws ParseException {
-		JSONObject jsonObject = new JSONObject(map);
+	public JSONObject deleteDataToDatabase(HttpServletRequest request)
+			throws ParseException, IOException {
+		String jsonObject=request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+	    
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "DELETE", jsonObject.toString());
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "DELETE", jsonObject);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -156,13 +163,14 @@ public class MockAPIController {
 
 	@RequestMapping(value = "/**", method = RequestMethod.TRACE, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject traceDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
-			throws ParseException {
-		JSONObject jsonObject = new JSONObject(map);
+	public JSONObject traceDataToDatabase(HttpServletRequest request)
+			throws ParseException, IOException {
+		String jsonObject=request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+	    
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "TRACE", jsonObject.toString());
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "TRACE", jsonObject);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -172,13 +180,14 @@ public class MockAPIController {
 
 	@RequestMapping(value = "/**", method = RequestMethod.OPTIONS, headers = "Accept=*/*", produces = {
 			"application/json" })
-	public JSONObject optionDataToDatabase(@RequestBody Map<String, String> map, HttpServletRequest request)
-			throws ParseException {
-		JSONObject jsonObject = new JSONObject(map);
+	public JSONObject optionDataToDatabase(HttpServletRequest request)
+			throws ParseException, IOException {
+		String jsonObject=request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+	    
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "OPTIONS", jsonObject.toString());
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "OPTIONS", jsonObject);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
