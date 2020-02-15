@@ -69,15 +69,48 @@ public class ApiMockServiceImpl implements ApiMockService {
 		//boolean flag=true;
 		List<ApiMongoTemplate> ls=new ArrayList<>();
 		List<ApiMongoTemplate> findByUrlPathAndMethod = this.findByUrlPathAndMethod(urlPath, method);
+		try {
+		
 		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {
-			if(jsonCompare(request,apiMongoTemplate.getRequest())) {
+			List<String> findvalueInResponse = findvalueInResponse(apiMongoTemplate.getRequest());
+			String req=apiMongoTemplate.getRequest();
+			for (String string : findvalueInResponse) {
+				List<String> value =new ArrayList<>();
+				try {
+					value = getValue(request, string);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				req=req.replace("${"+string+"}", value.get(0).replace("\"", ""));
+			}
+			
+			
+			
+			if(jsonCompare(request,req)) {
 				
 				ls.add(new ApiMongoTemplate(apiMongoTemplate.getId(),urlPath, method, request,apiMongoTemplate.getResponse()));
 				break;
 			}
 		}
-		
-		
+		if(ls.size()!=0) {
+		String responseValue=ls.get(0).getResponse();
+		List<String> findvalueInResponse = findvalueInResponse(responseValue);
+		for (String string : findvalueInResponse) {
+			List<String> value =new ArrayList<>();
+			try {
+				value = getValue(ls.get(0).getRequest(), string);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			responseValue=responseValue.replace("${"+string+"}", value.get(0).replace("\"", ""));
+		}
+		 ls.get(0).setResponse(responseValue);;
+		}
+		}catch(Exception e) {
+			ls=null;
+		}
 		return ls;
 	}
 
@@ -169,7 +202,7 @@ public class ApiMockServiceImpl implements ApiMockService {
 		}
 		return "X";
 	}
-	private static void checked(int j,String format,String key, JsonElement jsonElement) {
+	private static void checked(int j,String format,String key, JsonElement jsonElement,List<String> list) {
 		for (int i = j; i < format.length(); i++) {
 			if(format.charAt(i)=='{') {
 				
@@ -181,13 +214,13 @@ public class ApiMockServiceImpl implements ApiMockService {
 		                if (key1.equals(key)) {
 		                    list.add(entry.getValue().toString());
 		                }
-		                checked(i,format,key, entry.getValue());
+		                checked(i,format,key, entry.getValue(),list);
 		             }
 				}
 			}else if(format.charAt(i)=='[') {
 				if (jsonElement.isJsonArray()) {
 				JsonElement jsonElement2 = jsonElement.getAsJsonArray().get(Integer.parseInt(String.valueOf(format.charAt(i+1))));
-								checked(i,format,key, jsonElement2);
+								checked(i,format,key, jsonElement2,list);
 				}
 				}
 			}
@@ -195,12 +228,14 @@ public class ApiMockServiceImpl implements ApiMockService {
 
 		
 	
-	private static String getValue(String json,String format) throws JsonMappingException, JsonProcessingException, ParseException {
+	private static List<String> getValue(String json,String format) throws JsonMappingException, JsonProcessingException, ParseException {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonParser  parser = new JsonParser();
-		checked(0,format,"h4",parser.parse(json));
+		List<String> list = new ArrayList<String>();
+		int properString = getProperString(format);
+		checked(0,format.substring(0, properString),format.substring(properString, format.length()),parser.parse(json),list);
 
-		return "";
+		return list;
 	}
 	private static List<String> findvalueInResponse(String res) {
 		 Pattern pattern = Pattern.compile("\\$\\{([^\\}]+)\\}", Pattern.MULTILINE);
@@ -208,20 +243,32 @@ public class ApiMockServiceImpl implements ApiMockService {
          List<String> list=new ArrayList<>();
 		while (matcher.find()) {
 		    System.out.println("Full match: " + matcher.group(0));
-		    list.add(matcher.group(0));
+		    //list.add(matcher.group(0));
 		    for (int i = 1; i <= matcher.groupCount(); i++) {
 		        System.out.println("Group " + i + ": " + matcher.group(i));
+		        list.add(matcher.group(i));
 		    }
 		}
 		return list;
 	}
-
+private static int getProperString(String st) {
+ int index=0;
+	for (int i = 0; i < st.length(); i++) {
+		if(String.valueOf(st.charAt(i)).matches("[a-zA-Z]+")) {
+			index=i;
+			break;
+		}
+		index=i;
+	}
+	return index;
+}
 	
 	static List<String> list = new ArrayList<String>();
 	public static void main(String[] args) throws JsonMappingException, JsonProcessingException, ParseException {
-		
-		getValue("[{\"Hello\":\"hello\",\"Helo\":[{\"h1\":\"h2\",\"h4\":\"h7\"},{\"h1\":\"h4\"}]}]","[0{[0{");
-		list.forEach(a->{System.out.println(a);});
+		//String properString = getProperString("{{h1");
+		//System.out.println(properString);
+		List<String> value = getValue("[{\"Hello\":\"hello\",\"Helo\":[{\"h1\":\"h2\",\"h4\":\"h7\"},{\"h1\":\"h4\"}]}]","[0{[0{h1");
+		value.forEach(a->{System.out.println(a);});
 	}
      
 	
