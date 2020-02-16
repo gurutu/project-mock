@@ -81,7 +81,7 @@
    <tr>
     <td>POST</td>
     <td>/v1/test/dynamic?h1=${Q&h1}&h2=${Q&h2}</td>
-    <td><code>{ "h1": "h2","h3": [{"h4": "${B{[0{h4}"},{"h6": "${B{[1{h6}" }}</code></td>
+    <td><code>{ "h1": "h2","h3": [{"h4": "${B{[0{h4}"},{"h6": "${B{[1{h6}" }]}</code></td>
     <td><code>{"hello": "${B{[0{h4}","hello2": "${B{[1{h6}","h1query": "${Q&h1}",
   "h2query": "${Q&h2}"}</code></td>
   </tr>
