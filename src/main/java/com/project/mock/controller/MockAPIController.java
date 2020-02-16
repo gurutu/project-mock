@@ -73,7 +73,7 @@ public class MockAPIController {
         JSONParser parser = new JSONParser();		
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "POST",res); 
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "POST",res,request); 
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -90,7 +90,7 @@ public class MockAPIController {
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "PUT", jsonObject);
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "PUT", jsonObject,request);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -107,7 +107,7 @@ public class MockAPIController {
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "PATCH", jsonObject);
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "PATCH", jsonObject,request);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -121,7 +121,7 @@ public class MockAPIController {
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethod(request.getRequestURI() + uri, "GET"); 
+				.findByUrlPathAndMethod(request.getRequestURI() + uri, "GET",request); 
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -139,7 +139,7 @@ public class MockAPIController {
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "DELETE", jsonObject);
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "DELETE", jsonObject,request);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -153,7 +153,7 @@ public class MockAPIController {
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethod(request.getRequestURI() + uri, "HEAD");
+				.findByUrlPathAndMethod(request.getRequestURI() + uri, "HEAD",request);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -170,7 +170,7 @@ public class MockAPIController {
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "TRACE", jsonObject);
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "TRACE", jsonObject,request);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -187,7 +187,7 @@ public class MockAPIController {
 		JSONParser parser = new JSONParser();
 		String uri = request.getQueryString() == null ? "" : "?" + request.getQueryString();
 		List<ApiMongoTemplate> findByUrlPathAAndMethodAndRequest = apiDataService
-				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "OPTIONS", jsonObject);
+				.findByUrlPathAndMethodAndRequest(request.getRequestURI() + uri, "OPTIONS", jsonObject,request);
 
 		String response = findByUrlPathAAndMethodAndRequest.size() > 0
 				? findByUrlPathAAndMethodAndRequest.get(0).getResponse()
@@ -220,7 +220,7 @@ public class MockAPIController {
 	@RequestMapping(value = "/project-mock/searchbyUriandmethod", method = RequestMethod.POST, headers = "Accept=*/*", produces = {
 		"application/json" })
 	public List<ApiMongoTemplate> searchByUriAndMethod(@RequestBody Map<String, String> payload, HttpServletRequest request) {
-	return apiDataService.findByUrlPathAndMethod( payload.get("display").toString(), payload.get("value").toString());
+	return apiDataService.findByUrlPathAndMethodForUI( payload.get("display").toString(), payload.get("value").toString());
 	}
 
 	@RequestMapping(value = "/project-mock/searchbyid", method = RequestMethod.POST, headers = "Accept=*/*", produces = {

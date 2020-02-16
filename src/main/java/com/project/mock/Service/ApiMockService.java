@@ -3,6 +3,8 @@ package com.project.mock.Service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.project.mock.DataModal.ApiData;
 import com.project.mock.DataModal.ApiMongoTemplate;
 
@@ -15,9 +17,11 @@ public interface ApiMockService {
     
 	List<ApiMongoTemplate> findEmployeeByName(String url);
 
-	List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request);
+	List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request,HttpServletRequest httpRequest);
 
-	List<ApiMongoTemplate> findByUrlPathAndMethod(String urlPath, String method);
+	List<ApiMongoTemplate> findByUrlPathAndMethod(String urlPath, String method,HttpServletRequest request);
+	
+	List<ApiMongoTemplate> findByUrlPathAndMethodForUI(String urlPath, String method);
 	
 	
 	ApiMongoTemplate findById(String id);

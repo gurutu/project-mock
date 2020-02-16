@@ -8,18 +8,24 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import  org.junit.*;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -62,63 +68,125 @@ public class ApiMockServiceImpl implements ApiMockService {
 	}
 
 	@Override
-	public List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request) {
-		// TODO Auto-generated method stub
-		String response="";
-		String id="";
-		//boolean flag=true;
+	public List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request,HttpServletRequest httpRequest) {
+		
 		List<ApiMongoTemplate> ls=new ArrayList<>();
-		List<ApiMongoTemplate> findByUrlPathAndMethod = this.findByUrlPathAndMethod(urlPath, method);
+		Map<String,String> mp=new HashMap<>();
+		List<ApiMongoTemplate> findByUrlPathAndMethod = this.findByUrlPathAndMethod(urlPath, method,httpRequest);
 		try {
 		
 		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {
 			List<String> findvalueInResponse = findvalueInResponse(apiMongoTemplate.getRequest());
 			String req=apiMongoTemplate.getRequest();
+			List<String> value =new ArrayList<>();
 			for (String string : findvalueInResponse) {
-				List<String> value =new ArrayList<>();
+				
 				try {
-					value = getValue(request, string);
+					if(string.substring(0,1).equals("B")){
+						value = getValue(request, string.substring(1));
+					}else if(string.subSequence(0, 2).equals("Q&")) {
+						value=getValueInQuery(httpRequest.getQueryString(), string.substring(2));
+					}
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
+				mp.put("${"+string+"}", value.get(0).replace("\"", ""));
 				req=req.replace("${"+string+"}", value.get(0).replace("\"", ""));
 			}
-			
-			
-			
 			if(jsonCompare(request,req)) {
-				
 				ls.add(new ApiMongoTemplate(apiMongoTemplate.getId(),urlPath, method, request,apiMongoTemplate.getResponse()));
 				break;
+			}else {
+				mp.clear();
 			}
 		}
 		if(ls.size()!=0) {
 		String responseValue=ls.get(0).getResponse();
-		List<String> findvalueInResponse = findvalueInResponse(responseValue);
-		for (String string : findvalueInResponse) {
-			List<String> value =new ArrayList<>();
-			try {
-				value = getValue(ls.get(0).getRequest(), string);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			responseValue=responseValue.replace("${"+string+"}", value.get(0).replace("\"", ""));
+		for (Entry<String, String> m : mp.entrySet()) {
+			responseValue=responseValue.replace(m.getKey(),m.getValue());
 		}
 		 ls.get(0).setResponse(responseValue);;
 		}
 		}catch(Exception e) {
-			ls=null;
+			
 		}
 		return ls;
 	}
 
 	@Override
-	public List<ApiMongoTemplate> findByUrlPathAndMethod(String urlPath, String method) {
+	public List<ApiMongoTemplate> findByUrlPathAndMethodForUI(String urlPath, String method) {
 		// TODO Auto-generated method stub
 		return apiDataMongoRepository.findByUrlPathAndMethod(urlPath, method);
 	}
+	
+	private static Map<String,Object> getCorrectUrl(List<ApiMongoTemplate> findByUrlPathAndMethod,String mainUrl,String queryValue) {
+		List<ApiMongoTemplate> list=new ArrayList<>();
+		boolean flag=false;
+		Map<String,Object> map=new HashMap<>();
+		Map<String,String> mapval=new HashMap<>();
+		try {
+			mainUrl=URLDecoder.decode( mainUrl, "UTF-8" );
+		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {// template url
+			String tempUrl=apiMongoTemplate.getUrlPath();
+			//if(flag)break;
+			List<String> findvalueInResponse = findvalueInResponse(tempUrl);//find value match //${Q&h1} -> Q&h1
+			List<String> value =new ArrayList<>();
+			for (String str : findvalueInResponse) {
+				if(str.subSequence(0, 2).equals("Q&")) {
+					value=getValueInQuery(URLDecoder.decode( queryValue, "UTF-8" ), str.substring(2));
+				}
+				tempUrl=tempUrl.replace("${"+str+"}", value.get(0).replace("\"", ""));
+				mapval.put(str, value.get(0).replace("\"", ""));
+			}
+			if("GET,HEAD".contains(apiMongoTemplate.getMethod())&&tempUrl.equals(mainUrl)) {
+				list.clear();
+				list.add(apiMongoTemplate);
+				flag=true;
+				break;
+				
+			}else if(!"GET,HEAD".contains(apiMongoTemplate.getMethod())&&tempUrl.equals(mainUrl)){
+				//if(jsonCompare(request,req)) {
+					list.add(apiMongoTemplate);
+					//break;
+				//}
+			}else {
+				mapval.clear();
+			}
+			
+			
+		}
+		}catch(Exception e) {
+			
+		}
+		map.put("ApiMongoTemplate", list);
+		map.put("MapValue", mapval);
+		return map;
+	}
+	
+	@Override
+	public List<ApiMongoTemplate> findByUrlPathAndMethod(String urlPath, String method, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		//System.out.println(request.getQueryString());
+		List<ApiMongoTemplate> findByUrlPathAndMethod2 = apiDataMongoRepository.findByUrlAndMethodReg(request.getRequestURI(), method);
+		int index=0;
+		List<ApiMongoTemplate> apiMongoTemplatedata=new ArrayList<>();
+		Map<String,Object> mapData=getCorrectUrl(findByUrlPathAndMethod2,urlPath,request.getQueryString());
+		List<ApiMongoTemplate> findByUrlPathAndMethod = (List<ApiMongoTemplate>) mapData.get("ApiMongoTemplate");
+		Map<String,String> mapkeyvalue=(Map<String, String>) mapData.get("MapValue");
+		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {
+			String response=apiMongoTemplate.getResponse();
+			for (Entry<String, String> m : mapkeyvalue.entrySet()) {
+				response=response.replace("${"+m.getKey()+"}", m.getValue().replace("\"", ""));
+				}
+			apiMongoTemplate.setResponse(response);
+			apiMongoTemplatedata.add(apiMongoTemplate);
+		}
+		
+		return findByUrlPathAndMethod;
+	}
+	
 	private static boolean jsonCompare(String s1,String s2)  {
 		if(s1==null&&s2==null) {
 			return true;
@@ -148,7 +216,7 @@ public class ApiMockServiceImpl implements ApiMockService {
 	public boolean saveData(ApiMongoTemplate data) {
 		boolean flag=true;
 		String id="";
-		List<ApiMongoTemplate> findByUrlPathAndMethod = this.findByUrlPathAndMethod(data.getUrlPath(),data.getMethod());
+		List<ApiMongoTemplate> findByUrlPathAndMethod = apiDataMongoRepository.findByUrlPathAndMethod(data.getUrlPath(),data.getMethod());
 		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {
 			if(jsonCompare(data.getRequest(),apiMongoTemplate.getRequest())) {
 				flag=false;
@@ -178,7 +246,7 @@ public class ApiMockServiceImpl implements ApiMockService {
 
 	@Override
 	public boolean deleteByUrlAndMethod(String url, String method) {
-		List<ApiMongoTemplate> findByUrlPathAndMethod = this.findByUrlPathAndMethod(url, method);
+		List<ApiMongoTemplate> findByUrlPathAndMethod = apiDataMongoRepository.findByUrlPathAndMethod(url, method);
 		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {
 			this.deleteById(apiMongoTemplate.getId());
 		}
@@ -237,15 +305,27 @@ public class ApiMockServiceImpl implements ApiMockService {
 
 		return list;
 	}
+	private static List<String> getValueInQuery(String queryParam,String format) {
+		List<String> list=new ArrayList<>();
+		String[] split = queryParam.split("&");
+		for (String string : split) {
+			String querySplit[]=string.split("=");
+			if(format.equals(querySplit[0])) {
+				list.add(querySplit[1]);
+				break;
+			}
+		}
+		return list;
+	}
 	private static List<String> findvalueInResponse(String res) {
 		 Pattern pattern = Pattern.compile("\\$\\{([^\\}]+)\\}", Pattern.MULTILINE);
 		 Matcher matcher = pattern.matcher(res);
          List<String> list=new ArrayList<>();
 		while (matcher.find()) {
-		    System.out.println("Full match: " + matcher.group(0));
+		  //  System.out.println("Full match: " + matcher.group(0));
 		    //list.add(matcher.group(0));
 		    for (int i = 1; i <= matcher.groupCount(); i++) {
-		        System.out.println("Group " + i + ": " + matcher.group(i));
+		   //     System.out.println("Group " + i + ": " + matcher.group(i));
 		        list.add(matcher.group(i));
 		    }
 		}
@@ -270,6 +350,8 @@ private static int getProperString(String st) {
 		List<String> value = getValue("[{\"Hello\":\"hello\",\"Helo\":[{\"h1\":\"h2\",\"h4\":\"h7\"},{\"h1\":\"h4\"}]}]","[0{[0{h1");
 		value.forEach(a->{System.out.println(a);});
 	}
+
+	
      
 	
 }
