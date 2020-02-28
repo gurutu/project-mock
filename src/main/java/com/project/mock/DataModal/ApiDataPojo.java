@@ -4,6 +4,11 @@ import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * 
+ * @author Pranav
+ *
+ */
 public class ApiDataPojo {
 
 	@JsonIgnore

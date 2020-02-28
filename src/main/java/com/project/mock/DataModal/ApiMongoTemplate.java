@@ -5,6 +5,11 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * 
+ * @author Pranav
+ *
+ */
 @Document
 public class ApiMongoTemplate {
 

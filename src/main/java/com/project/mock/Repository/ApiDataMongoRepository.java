@@ -8,6 +8,11 @@ import org.springframework.data.mongodb.repository.Query;
 import com.project.mock.DataModal.ApiData;
 import com.project.mock.DataModal.ApiMongoTemplate;
 
+/**
+ * 
+ * @author Pranav
+ *
+ */
 public interface ApiDataMongoRepository extends MongoRepository<ApiMongoTemplate, String> {
 
 	List<ApiMongoTemplate> findByUrlPath(String replace);

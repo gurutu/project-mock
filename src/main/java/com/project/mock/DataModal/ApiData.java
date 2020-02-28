@@ -6,6 +6,11 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+/**
+ * 
+ * @author Pranav
+ *
+ */
 @Document(indexName = "mock-data", type = "ApiData")
 public class ApiData {
 
