@@ -2,12 +2,20 @@ package com.project.mock.util;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.parser.ParseException;
 
@@ -18,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.project.mock.DataModal.ApiMongoTemplate;
+import com.project.mock.DataModal.HttpData;
 
 /**
  * 
@@ -127,11 +136,15 @@ public class MockUtil {
 	 * @param queryValue
 	 * @return
 	 */
-	public  static Map<String,Object> getCorrectUrl(List<ApiMongoTemplate> findByUrlPathAndMethod,String mainUrl,String queryValue) {
+	public  static Map<String,Object> getCorrectUrl(List<ApiMongoTemplate> findByUrlPathAndMethod,String mainUrl,HttpServletRequest request) {
 		List<ApiMongoTemplate> list=new ArrayList<>();
 		boolean flag=false;
+		String queryValue=request.getQueryString();
+
+		
 		Map<String,Object> map=new HashMap<>();
 		Map<String,String> mapval=new HashMap<>();
+		
 		try {
 			mainUrl=URLDecoder.decode( mainUrl, "UTF-8" );
 		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {// template url
@@ -166,12 +179,50 @@ public class MockUtil {
 		}catch(Exception e) {
 			
 		}
+
 		map.put("ApiMongoTemplate", list);
 		map.put("MapValue", mapval);
 		return map;
+		
+	}
+	
+	private static String getPathParamValue(String mainUrl, String pattern) {
+		String value="";
+		try {
+			mainUrl=URLDecoder.decode( mainUrl, "UTF-8" );
+			String Url[]=mainUrl.split("/");
+			value=Url[pattern.length()];
+		}catch (Exception e) {
+			//e.printStackTrace();
+		}
+	    return value;
 	}
 	
 	
+	private static String getHeaderValue(Map<String,String> req, String headerName) {
+	    return req.get(headerName.toLowerCase());
+	}
+	
+	private static String getCookieValue(Cookie[] req, String cookieName) {
+	    return Arrays.stream(req)
+	            .filter(c -> c.getName().equals(cookieName))
+	            .findFirst()
+	            .map(Cookie::getValue)
+	            .orElse(null);
+	}
+	
+	public static String getQueryParameter(String queryParam,String format) {
+		String list="";
+		String[] split = queryParam.split("&");
+		for (String string : split) {
+			String querySplit[]=string.split("=");
+			if(format.equals(querySplit[0])) {
+				list=querySplit[1];
+				break;
+			}
+		}
+		return list;
+	}
 	
 	public static List<String> getValueInQuery(String queryParam,String format) {
 		List<String> list=new ArrayList<>();
@@ -186,9 +237,11 @@ public class MockUtil {
 		return list;
 	}
 	public static List<String> findvalueInResponse(String res) {
+		 List<String> list=new ArrayList<>();
+		if(res==null) return list;
 		 Pattern pattern = Pattern.compile("\\$\\{([^\\}]+)\\}", Pattern.MULTILINE);
 		 Matcher matcher = pattern.matcher(res);
-         List<String> list=new ArrayList<>();
+        
 		while (matcher.find()) {
 		  //  System.out.println("Full match: " + matcher.group(0));
 		    //list.add(matcher.group(0));
@@ -198,6 +251,100 @@ public class MockUtil {
 		    }
 		}
 		return list;
+	}
+	
+	public  static Map<String,Object> getCorrectUrlAvd(List<ApiMongoTemplate> findByUrlPathAndMethod,String requestVal,String mainUrl,HttpServletRequest request, HttpData data) {
+		
+		
+		Map<String,Object> map=new HashMap<>();
+		List<ApiMongoTemplate> filterDataByMethod=findByUrlPathAndMethod.stream().filter(a->a.getMethod().equals(request.getMethod()))
+				.collect(Collectors.toList());
+		ApiMongoTemplate listData=new ApiMongoTemplate();
+		Map<String,String> mapval=new HashMap<>();
+		int min=Integer.MAX_VALUE;
+		try {
+			
+			mainUrl=URLDecoder.decode( mainUrl, "UTF-8" );
+			
+			for (ApiMongoTemplate apiMongoTemplate : filterDataByMethod) {
+				String tempUrl=apiMongoTemplate.getUrlPath();
+				int intMin=0;
+				List<String> findvalueInResponse = findvalueInResponse(tempUrl);//find value match //${Q&h1} -> Q&h1
+				for (String str : findvalueInResponse) {
+					String value="";
+					if(str.subSequence(0, 2).equals("Q&")) {
+						value=getQueryParameter(URLDecoder.decode( request.getQueryString()!=null?request.getQueryString():"", "UTF-8" ), str.substring(2));
+					}else if(str.subSequence(0, 2).equals("P&")) {
+						value=getPathParamValue(mainUrl, str.substring(2));
+					}
+					tempUrl=tempUrl.replace("${"+str+"}", value.replace("\"", ""));
+					mapval.put(str, value.replace("\"", ""));
+					intMin++;
+				}
+				//Request Filter
+				
+				List<String> templateRequest = findvalueInResponse(apiMongoTemplate.getRequest());
+				List<String> value =new ArrayList<>();
+				String req=apiMongoTemplate.getRequest();
+				for (String string : templateRequest) {
+					if(string.substring(0,1).equals("B")){
+						value = getValue(requestVal, string.substring(1));
+					}
+					mapval.put(string, value.get(0).replace("\"", ""));
+					req=req.replace("${"+string+"}", value.get(0).replace("\"", ""));
+					intMin++;
+				}
+				
+				//Response
+				boolean flag=false;
+				if("GET,HEAD".contains(apiMongoTemplate.getMethod())) {
+					// if(requestVal==""&&req==null) {
+						 flag= true;
+					//}
+					//flag=jsonDataCompare(requestVal,req);
+				}else {
+					 flag=jsonDataCompare(requestVal,req);
+				}
+				
+				if(flag&&tempUrl.equals(mainUrl)&&min<intMin) {
+					//listData=(List<ApiMongoTemplate>) new ApiMongoTemplate(apiMongoTemplate.getId(),tempUrl, request.getMethod(), requestVal,apiMongoTemplate.getResponse());
+					
+				}else if(flag&&tempUrl.equals(mainUrl)){
+					listData=new ApiMongoTemplate(apiMongoTemplate.getId(),tempUrl, request.getMethod(), requestVal,apiMongoTemplate.getResponse());
+					min=intMin;
+				}
+			
+				
+			}
+			//Response 
+			
+			String responseValue=listData.getResponse();
+			if(responseValue!=null) {
+			for (Entry<String, String> m : mapval.entrySet()) {
+				responseValue=responseValue.replace("${"+m.getKey()+"}",m.getValue());
+			}
+			List<String> templateResponse = findvalueInResponse(responseValue);
+			for (String string : templateResponse) {
+				String value="";
+				if(string.subSequence(0, 2).equals("H&")) {
+					value=getHeaderValue(data.getHeaderData(), string.substring(2));
+				}else if(string.subSequence(0, 2).equals("C&")) {
+					value=getCookieValue(data.getCookies(), string.substring(2));
+				}
+				mapval.put(string, value.replace("\"", ""));
+				responseValue=responseValue.replace("${"+string+"}", value.replace("\"", ""));
+			}
+			
+			listData.setResponse(responseValue);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		map.put("ApiMongoTemplate", listData);
+		map.put("MapValue", mapval);
+		return map;
 	}
 	
 }

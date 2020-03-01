@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.mock.DataModal.ApiData;
 import com.project.mock.DataModal.ApiMongoTemplate;
+import com.project.mock.DataModal.HttpData;
 import com.project.mock.Repository.ApiDataMongoRepository;
 import com.project.mock.util.MockUtil;
 
@@ -69,11 +70,11 @@ public class ApiMockServiceImpl implements ApiMockService {
 	}
 
 	@Override
-	public List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request,HttpServletRequest httpRequest) {
+	public List<ApiMongoTemplate> findByUrlPathAndMethodAndRequest(String urlPath, String method, String request,HttpServletRequest httpRequest, HttpData data) {
 		
 		List<ApiMongoTemplate> ls=new ArrayList<>();
 		Map<String,String> mp=new HashMap<>();
-		List<ApiMongoTemplate> findByUrlPathAndMethod = this.findByUrlPathAndMethod(urlPath, method,httpRequest);
+		List<ApiMongoTemplate> findByUrlPathAndMethod = this.findByUrlPathAndMethod(urlPath, request, method,httpRequest,data);
 		try {
 		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {
 			List<String> findvalueInResponse = MockUtil.findvalueInResponse(apiMongoTemplate.getRequest());
@@ -121,25 +122,28 @@ public class ApiMockServiceImpl implements ApiMockService {
 	
 	
 	@Override
-	public List<ApiMongoTemplate> findByUrlPathAndMethod(String urlPath, String method, HttpServletRequest request) {
+	public List<ApiMongoTemplate> findByUrlPathAndMethod(String urlPath,String requestval, String method, HttpServletRequest request,HttpData data) {
 		// TODO Auto-generated method stub
 		//System.out.println(request.getQueryString());
 		List<ApiMongoTemplate> findByUrlPathAndMethod2 = apiDataMongoRepository.findByUrlAndMethodReg(request.getRequestURI(), method);
 		int index=0;
 		List<ApiMongoTemplate> apiMongoTemplatedata=new ArrayList<>();
-		Map<String,Object> mapData=MockUtil.getCorrectUrl(findByUrlPathAndMethod2,urlPath,request.getQueryString());
-		List<ApiMongoTemplate> findByUrlPathAndMethod = (List<ApiMongoTemplate>) mapData.get("ApiMongoTemplate");
+		Map<String,Object> mapData=MockUtil.getCorrectUrlAvd(findByUrlPathAndMethod2,requestval,urlPath,request,data);
+		ApiMongoTemplate apiMongoTemplate = (ApiMongoTemplate) mapData.get("ApiMongoTemplate");
 		Map<String,String> mapkeyvalue=(Map<String, String>) mapData.get("MapValue");
-		for (ApiMongoTemplate apiMongoTemplate : findByUrlPathAndMethod) {
+		
 			String response=apiMongoTemplate.getResponse();
+			if(response!=null) {
 			for (Entry<String, String> m : mapkeyvalue.entrySet()) {
 				response=response.replace("${"+m.getKey()+"}", m.getValue().replace("\"", ""));
 				}
 			apiMongoTemplate.setResponse(response);
 			apiMongoTemplatedata.add(apiMongoTemplate);
-		}
+			}
+			
+		//}
 		
-		return findByUrlPathAndMethod;
+		return apiMongoTemplatedata;
 	}
 	
 	
@@ -211,12 +215,22 @@ public class ApiMockServiceImpl implements ApiMockService {
 	
 
 		
-	
+	public static void m1(int a,float b) {
+		System.out.println("H");
+	}
+	public static void m1(float a,int b) {
+		System.out.println("H1");
+	}
 
 
 	
 	static List<String> list = new ArrayList<String>();
 	public static void main(String[] args) throws JsonMappingException, JsonProcessingException, ParseException {
+		int  arr[]= {2,4,5,1,2};
+		Arrays.sort(arr);
+		int secondHigh=arr[arr.length-2];
+		int firstHigh=arr[arr.length-1];
+		System.out.println(secondHigh+" "+firstHigh);
 		//String properString = getProperString("{{h1");
 		//System.out.println(properString);
 	//	List<String> value = getValue("[{\"Hello\":\"hello\",\"Helo\":[{\"h1\":\"h2\",\"h4\":\"h7\"},{\"h1\":\"h4\"}]}]","[0{[0{h1");

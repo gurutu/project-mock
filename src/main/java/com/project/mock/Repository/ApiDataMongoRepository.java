@@ -25,6 +25,6 @@ public interface ApiDataMongoRepository extends MongoRepository<ApiMongoTemplate
 
 	List<ApiMongoTemplate> findByUrlPathAndMethod(String urlPath, String method);
 	
-	@Query("{'urlPath': {$regex: '?0.*'},'method': {$regex: '.*?1.*'}}")
+	@Query("{'method': {$regex: '.*?1.*'}}")
 	List<ApiMongoTemplate> findByUrlAndMethodReg(String urlPath,String method);
 }
